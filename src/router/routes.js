@@ -9,10 +9,19 @@ const routes = [
   },
 
   {
-    path: '/sakanal',
-    component: () => import('layouts/MainLayout.vue'),
+    path: '/admin',
+    component: () => import('layouts/AdminLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/sakanal.vue') }
+      { path: '', component: () => import('pages/Admin/index.vue') },
+      { path: 'big_screen', component: () => import('pages/Admin/big_screen.vue') }
+    ]
+  },
+
+  {
+    path: '/cashier',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Cashier/index.vue') }
     ]
   },
 
