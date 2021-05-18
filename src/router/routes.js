@@ -2,9 +2,9 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/blank.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/Login/login.vue') }
     ]
   },
 
@@ -22,14 +22,6 @@ const routes = [
     component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Cashier/index.vue') }
-    ]
-  },
-
-  {
-    path: '/login',
-    component: () => import('layouts/LoginLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/login.vue') }
     ]
   },
 
