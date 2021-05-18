@@ -26,7 +26,7 @@
                     <div class="text-h3">{{ meron }}</div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" :disable="started" @click="displayWinner('meron')" color="red" label="MERON WINS" />
+            <q-btn size="xl" :disable="!started" @click="displayWinner('meron')" color="red" label="MERON WINS" />
         </div>
 
         <div class="col q-gutter-sm">
@@ -41,17 +41,23 @@
                     <div class="text-h3">{{ wala }}</div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" :disable="started" @click="displayWinner('wala')" color="primary" label="WALA WINS" />
+            <q-btn size="xl" :disable="!started" @click="displayWinner('wala')" color="primary" label="WALA WINS" />
+        </div>
+    </div>
+
+    <div id="oddss" class="row q-gutter-xs text-center">
+        <div class="col q-gutter-sm">
+            <q-btn size="xl" :disable="!started" @click="displayWinner('draw')" color="green" label="Draw" />
         </div>
     </div>
 
     <div id="winnerPop" class="row q-gutter-xs">
-        <q-dialog  v-model="winnerPop" persistent>
-            <q-card style="width:500px" :class="bground">
-                <q-card-section class="q-pa-lg text-white row">
+        <q-dialog  v-model="winnerPop">
+            <q-card style="width:500px;" :class="modal.bground">
+                <q-card-section class="text-white row">
                 <div class="text-h1">{{ winner }}</div>
                 </q-card-section>
-                <q-card-section class="q-pa-lg text-white row">
+                <q-card-section class="text-white row">
                 <div class="text-h1">WINS</div>
                 </q-card-section>
             </q-card>
@@ -61,9 +67,9 @@
     <div id="control" class="row q-gutter-xs text-center">
         <div dark bordered class="col bg-white my-card ">
             <q-card-section class="q-gutter-sm">
-                <q-btn size="xl" :disable="started" @click="oddedit = true" color="primary" label="Edit Odds" />
-                <q-btn size="xl" :disable="started" @click="startmatch" color="green" label="Start Match" />
-                <q-btn size="xl" :disable="!started" @click="endmatch" color="red" label="End Match" />
+                <q-btn size="xl" :disable="started" @click="oddedit = true" color="primary" label="Edit Odds" icon="edit" />
+                <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" label="Start Match" />
+                <!-- <q-btn size="xl" :disable="!started" @click="endmatch" color="red" label="End Match" /> -->
             </q-card-section>
         </div>
     </div>
@@ -100,7 +106,9 @@
 export default {
   data () {
     return {
-      bground: '',
+      modal: {
+        bground: ''
+      },
       winnerPop: false,
       started: false,
       oddedit: false,
@@ -221,21 +229,19 @@ export default {
       console.log(text)
       if (text === 'meron') {
         this.winner = 'MERON'
-        this.bground = 'bg-red'
+        this.modal.bground = 'bg-red'
       } else {
         this.winner = 'WALA'
-        this.bground = 'bg-blue'
+        this.modal.bground = 'bg-blue'
       }
       this.winnerPop = true
+      this.started = false
     },
     startmatch () {
       this.started = true
     },
     editOdd () {
       this.oddedit = false
-    },
-    endmatch () {
-      this.started = false
     }
   }
 }
