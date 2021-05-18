@@ -9,9 +9,10 @@
       </q-header>
 
       <q-drawer
+        style="font-size:15pt"
         v-model="drawer"
         show-if-above
-        :width="200"
+        :width="300"
         :breakpoint="500"
         bordered
         content-class="bg-grey-3"
@@ -20,7 +21,7 @@
           <q-list>
 
             <template v-for="(menuItem, index) in menuList">
-              <q-item :key="index" clickable :active="menuItem.label === 'History'" v-ripple>
+              <q-item :key="index" clickable :to="menuItem.route" active-class="bg-blue text-white" :active="menuItem.label === 'History'" v-ripple @click="minify(menuItem.route)">
                 <q-item-section avatar>
                   <q-icon :name="menuItem.icon" />
                 </q-item-section>
@@ -47,18 +48,14 @@ const menuList = [
   {
     icon: 'home',
     label: 'Home',
-    separator: true
-  },
-  {
-    icon: 'history',
-    label: 'History',
-    separator: true,
-    to: 'admin/index'
+    separator: false,
+    route: '/admin'
   },
   {
     icon: 'tv',
     label: 'Big Screen',
-    separator: true
+    separator: false,
+    route: '/admin/big_screen'
   },
   {
     icon: 'settings',
@@ -72,6 +69,15 @@ export default {
     return {
       drawer: false,
       menuList
+    }
+  },
+  methods: {
+    minify (a) {
+      if (a === '/admin') {
+        this.miniState = true
+      } else {
+        this.miniState = false
+      }
     }
   }
 }
