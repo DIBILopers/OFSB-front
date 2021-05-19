@@ -4,7 +4,7 @@
         <div class="col q-gutter-sm">
             <q-card dark bordered class="bg-red-7 my-card">
                 <q-card-section>
-                    <div class="text-h1">MERON</div>
+                    <div class="text-h1" style="font-size:10vw;">MERON</div>
                 </q-card-section>
 
                 <q-separator dark inset />
@@ -19,7 +19,7 @@
         <div class="col q-gutter-sm">
             <q-card dark bordered class="bg-blue-7 my-card">
                 <q-card-section>
-                    <div class="text-h1">WALA</div>
+                    <div class="text-h1" style="font-size:10vw;" >WALA</div>
                 </q-card-section>
 
                 <q-separator dark inset />
