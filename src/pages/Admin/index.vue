@@ -113,7 +113,7 @@ export default {
       started: false,
       oddedit: false,
       meron: 100,
-      wala: 100,
+      wala: 10,
       winner: '',
       columns: [
         {

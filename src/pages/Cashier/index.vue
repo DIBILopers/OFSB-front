@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-md q-gutter-lg">
-    <div id="oddss" class="row q-gutter-xs text-center">
+    <div id="oddss"  class="row q-gutter-xs text-center">
         <div class="col q-gutter-sm">
             <q-card dark bordered class="bg-red-7 my-card">
                 <q-card-section>
-                    <div class="text-h1" style="font-size:10vw;">MERON</div>
+                    <div class="text-h2" style="font-size:7vw;">MERON</div>
                 </q-card-section>
 
                 <q-separator dark inset />
@@ -19,7 +19,7 @@
         <div class="col q-gutter-sm">
             <q-card dark bordered class="bg-blue-7 my-card">
                 <q-card-section>
-                    <div class="text-h1" style="font-size:10vw;" >WALA</div>
+                    <div class="text-h2" style="font-size:7vw;" >WALA</div>
                 </q-card-section>
 
                 <q-separator dark inset />
@@ -31,13 +31,91 @@
             <q-btn size="xl" color="blue" label="WALA" />
         </div>
     </div>
-  </div>
+     <!-- <div id="oddss" class="row">
+        <q-dialog v-model="oddedit" persistent class="">
+            <q-card>
+                <q-card-section class="row text- q-gutter-md">
+                  <div class="q-pa-md" style="max-width: 350px">
+                    <q-list  separator>
+                      <q-item >
+                        <q-item-label v-model="sultada">Sultada # 24</q-item-label>
+                      </q-item>
+                      <q-item >
+                          <q-item-label v-model="betside">Bet Side <b>WALA</b></q-item-label>
+                      </q-item>
+                    </q-list>
+                  </div>
+                </q-card-section>
+                  <q-card-section class="row">
+                  <q-input outlined v-model="nickname" label="Nickname" />
+                  <q-input outlined v-model="bet" label="Bet" />
+                </q-card-section>
+
+                <q-card-actions align="right">
+                <q-btn label="Save" color="green" v-close-popup />
+                <q-btn label="Cancel" color="primary" v-close-popup />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
+  </div> -->
+   <q-card>
+       <q-card-section class="row q-gutter-md">
+        <div class="col-5 q-gutter-sm">
+          <q-input outlined v-model="nickname" label="Nickname" />
+          <q-input outlined v-model="bet" label="Bet" />
+            <q-card-actions align="right">
+             <q-btn class="full-width" label="Bet" color="green" v-close-popup />
+           </q-card-actions>
+        </div>
+        <div class="q-pa-md col bg-">
+          <q-list bordered separator>
+            <q-item >
+              <q-item-label v-model="sultada">Sultada # 24 -- May 20, 2021 / 1:03.00 PM</q-item-label>
+            </q-item>
+            <q-item >
+                <q-item-label v-model="betside">Bet Side <b class="text-red">WALA</b></q-item-label>
+            </q-item>
+              <q-item >
+              <q-item-label v-model="odds"> Odds:</q-item-label>
+            </q-item>
+            <q-item >
+                <q-item-label v-model="betamount">Bet Amount:</q-item-label>
+            </q-item>
+              <q-item >
+              <q-item-label v-model="betprize">Bet Prize</q-item-label>
+            </q-item>
+            <q-item >
+                <q-item-label v-model="totalpayout">Total Payout:</q-item-label>
+            </q-item>
+              <q-card-actions align="left">
+                <q-btn label="Print" color="green" v-close-popup />
+                <q-btn label="Back" color="primary" v-close-popup />
+              </q-card-actions>
+          </q-list>
+        </div>
+          </q-card-section>
+      </q-card>
+    </div>
 </template>
 
 <script>
 export default {
   data () {
     return {
+      modal: {
+        bground: ''
+      },
+      winnerPop: false,
+      started: false,
+      oddedit: false,
+      bet: 50000,
+      sultada: '#23',
+      nickname: 'bords',
+      betamount: 5000,
+      betprize: 3000,
+      odds: 170,
+      totalpayout: 8000,
+      winner: '',
       columns: [
         {
           name: 'Match Number',
@@ -145,6 +223,14 @@ export default {
           total: 500000
         }
       ]
+    }
+  },
+  methods: {
+    startmatch () {
+      this.started = true
+    },
+    editOdd () {
+      this.oddedit = false
     }
   }
 }
