@@ -68,7 +68,7 @@
         <div dark bordered class="col bg-white my-card ">
             <q-card-section class="q-gutter-sm">
                 <q-btn size="xl" :disable="started" @click="oddedit = true" color="primary" label="Edit Odds" icon="edit" />
-                <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" label="Start Match" />
+                <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" :label="started? 'Match Started' : 'Start Match'" />
                 <!-- <q-btn size="xl" :disable="!started" @click="endmatch" color="red" label="End Match" /> -->
             </q-card-section>
         </div>
