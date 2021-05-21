@@ -64,7 +64,7 @@
           <q-input outlined v-model="nickname" label="Nickname" />
           <q-input outlined v-model="bet" label="Bet" />
             <q-card-actions align="right">
-             <q-btn class="full-width" label="Bet" color="green" v-close-popup />
+             <q-btn class="full-width" icon="monetization_on" label="Bet" color="green" v-close-popup />
            </q-card-actions>
         </div>
         <div class="q-pa-md col bg-">
@@ -79,7 +79,7 @@
               <q-item-label v-model="odds"> Odds:</q-item-label>
             </q-item>
             <q-item >
-                <q-item-label v-model="betamount">Bet Amount:</q-item-label>
+                <q-item-label v-model="betamount">Bet Amount: <strong>{{ betamount }}</strong></q-item-label>
             </q-item>
               <q-item >
               <q-item-label v-model="betprize">Bet Prize</q-item-label>
@@ -88,7 +88,7 @@
                 <q-item-label v-model="totalpayout">Total Payout:</q-item-label>
             </q-item>
               <q-card-actions align="left">
-                <q-btn label="Print" color="green" v-close-popup />
+                <q-btn label="Print" icon="print" color="green" v-close-popup />
                 <q-btn label="Back" color="primary" v-close-popup />
               </q-card-actions>
           </q-list>
