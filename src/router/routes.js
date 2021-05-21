@@ -12,7 +12,8 @@ const routes = [
     path: '/admin',
     component: () => import('layouts/AdminLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Admin/index.vue') },
+      { path: 'home', component: () => import('pages/Admin/index.vue') },
+      { path: 'control_panel', component: () => import('pages/Admin/control.vue') },
       { path: 'big_screen', component: () => import('pages/Admin/big_screen.vue') }
     ]
   },

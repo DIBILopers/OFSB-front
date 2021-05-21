@@ -49,7 +49,13 @@ const menuList = [
     icon: 'home',
     label: 'Home',
     separator: false,
-    route: '/admin'
+    route: '/admin/home'
+  },
+  {
+    icon: 'grid_view',
+    label: 'Control Panel',
+    separator: false,
+    route: '/admin/control_panel'
   },
   {
     icon: 'tv',
