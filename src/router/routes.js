@@ -2,25 +2,27 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/blank.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/Login/login.vue') }
     ]
   },
 
   {
-    path: '/sakanal',
-    component: () => import('layouts/MainLayout.vue'),
+    path: '/admin',
+    component: () => import('layouts/AdminLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/sakanal.vue') }
+      { path: 'home', component: () => import('pages/Admin/index.vue') },
+      { path: 'control_panel', component: () => import('pages/Admin/control.vue') },
+      { path: 'big_screen', component: () => import('pages/Admin/big_screen.vue') }
     ]
   },
 
   {
-    path: '/login',
-    component: () => import('layouts/LoginLayout.vue'),
+    path: '/cashier',
+    component: () => import('layouts/AdminLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/login.vue') }
+      { path: '', component: () => import('pages/Cashier/index.vue') }
     ]
   },
 
