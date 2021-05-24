@@ -1,11 +1,12 @@
 <template>
   <div class="q-pa-md q-gutter-lg">
 
+    <!-- <q-btn color="primary" label="Primary" @click="getUserData" /> -->
     <div id="history">
         <q-table
             class="my-sticky-column-table"
             title="History"
-            :data="data"
+            :data="user_data"
             :columns="columns"
             row-key="name"
         />
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+import { axiosCont } from 'boot/axios'
+
 export default {
   data () {
     return {
@@ -28,114 +31,47 @@ export default {
       winner: '',
       columns: [
         {
-          name: 'Match Number',
+          name: 'Id',
           required: true,
           label: 'Match Number',
           align: 'center',
-          field: 'id',
+          field: 'Id',
           format: val => `${val}`,
           sortable: true
         },
         {
           name: 'name',
           required: true,
-          label: 'Match',
+          label: 'Match Number',
           align: 'center',
-          field: row => row.name,
+          field: 'name',
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'meron',
+          name: 'role',
+          required: true,
+          label: 'Match Number',
           align: 'center',
-          label: 'Meron',
-          field: 'meron',
-          sortable: true
-        },
-        {
-          name: 'wala',
-          align: 'center',
-          label: 'Wala',
-          field: 'wala',
-          sortable: true
-        },
-        {
-          name: 'winner',
-          align: 'center',
-          label: 'Winner',
-          field: 'winner',
-          sortable: true
-        },
-        {
-          name: 'total',
-          align: 'center',
-          label: 'Total Bet',
-          field: 'total',
+          field: 'role',
+          format: val => `${val}`,
           sortable: true
         }
       ],
 
-      data: [
-        {
-          id: '1',
-          name: 'Twice vs Momoland',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '2',
-          name: 'Twice vs Blackpink',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '3',
-          name: 'Twice vs Itzy',
-          meron: 170,
-          wala: 230,
-          winner: 'Draw',
-          total: 500000
-        },
-        {
-          id: '4',
-          name: 'Twice vs BTS',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '5',
-          name: 'Twice vs Izone',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '6',
-          name: 'Twice vs Mamamoo',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '7',
-          name: 'Twice vs Redvelvet',
-          meron: 170,
-          wala: 230,
-          winner: 'Redvelvet',
-          total: 500000
-        }
-      ]
+      user_data: []
     }
   },
   methods: {
+    getUserData () {
+      axiosCont.get('http://localhost:8000/user/data', {
+
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.user_data = response.data
+      })
+    },
     displayWinner (text) {
       console.log(text)
       if (text === 'meron') {
@@ -154,6 +90,9 @@ export default {
     editOdd () {
       this.oddedit = false
     }
+  },
+  mounted () {
+    this.getUserData()
   }
 }
 </script>
