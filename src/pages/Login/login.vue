@@ -1,11 +1,7 @@
 <template>
-  <q-page>
-    <q-parallax
-      src="~assets/bg-login3.jpg"
-      height="1000"
-    >
-      <div class="row justify-center" style="margin-top:0pt;">
-        <div class="col">
+  <q-page class="background">
+      <div class="row flex flex-center " style="padding-top: 120pt;">
+        <div class="col-3">
           <q-card class="my-card q-pa-md rounded-borders shadow-6" style="background-color: rgba(133, 136, 140, 0.3);">
             <q-card-section class="top-login-bar text-white">
               <div class="text-h3 text-center"> Login </div>
@@ -40,8 +36,6 @@
           </q-card>
         </div>
       </div>
-    </q-parallax>
-
   </q-page>
 </template>
 
@@ -58,3 +52,12 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+.background
+  background: url('~assets/bg-login3.jpg') no-repeat center center fixed
+  -webkit-background-size: cover
+  -moz-background-size: cover
+  -o-background-size: cover
+  background-size: cover
+</style>
