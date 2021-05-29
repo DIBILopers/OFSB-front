@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="bg-white q-pa-md">
   <q-layout view="hHh Lpr lff">
       <q-header elevated style="background: #24292e;">
         <q-toolbar>
@@ -17,7 +17,7 @@
         :width="280"
         :breakpoint="500"
         bordered
-        content-class="bg-grey-2 text-grey-9"
+        content-class="bg-blue-grey-1 text-grey-9"
       >
         <q-scroll-area class="fit">
           <q-list>
