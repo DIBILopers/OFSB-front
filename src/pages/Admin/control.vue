@@ -51,14 +51,11 @@
         </div>
     </div>
 
-    <div id="winnerPop" class="row q-gutter-xs">
+    <div id="winnerPop" class="row justify-center q-gutter-xs">
         <q-dialog  v-model="winnerPop">
             <q-card style="width:500px;" :class="modal.bground">
                 <q-card-section class="text-white row">
-                <div class="text-h1">{{ winner }}</div>
-                </q-card-section>
-                <q-card-section class="text-white row">
-                <div class="text-h1">WINS</div>
+                  <div class="text-h1 text-center">{{ winner }}</div>
                 </q-card-section>
             </q-card>
         </q-dialog>
@@ -68,7 +65,7 @@
         <div dark bordered class="col bg-white my-card ">
             <q-card-section class="q-gutter-sm">
                 <q-btn size="xl" :disable="started" @click="oddedit = true" color="primary" label="Edit Odds" icon="edit" />
-                <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" label="Start Match" />
+                <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" :label="started? 'Match Started' : 'Start Match'" />
                 <!-- <q-btn size="xl" :disable="!started" @click="endmatch" color="red" label="End Match" /> -->
             </q-card-section>
         </div>
@@ -78,8 +75,8 @@
         <q-dialog v-model="oddedit" persistent class="col-8">
             <q-card>
                 <q-card-section class="row items-center q-gutter-md">
-                <q-input class="" outlined color="red" v-model="meron" label="Meron" />
-                <q-input outlined v-model="wala" label="Wala" />
+                <q-input class="" type="number" outlined color="red" v-model="meron" label="Meron" />
+                <q-input outlined type="number" v-model="wala" label="Wala" />
                 </q-card-section>
 
                 <q-card-actions align="right">
@@ -228,11 +225,14 @@ export default {
     displayWinner (text) {
       console.log(text)
       if (text === 'meron') {
-        this.winner = 'MERON'
+        this.winner = 'MERON WINS'
         this.modal.bground = 'bg-red'
-      } else {
-        this.winner = 'WALA'
+      } else if (text === 'wala') {
+        this.winner = 'WALA WINS'
         this.modal.bground = 'bg-blue'
+      } else {
+        this.winner = 'DRAW'
+        this.modal.bground = 'bg-green'
       }
       this.winnerPop = true
       this.started = false

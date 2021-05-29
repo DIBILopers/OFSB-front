@@ -52,7 +52,7 @@ const menuList = [
     route: '/admin/home'
   },
   {
-    icon: 'home',
+    icon: 'grid_view',
     label: 'Control Panel',
     separator: false,
     route: '/admin/control_panel'
