@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md q-gutter-lg">
+  <div class="q-pa-xs q-gutter-lg">
     <div id="oddss" class="row q-gutter-xs text-center">
         <div class="col q-gutter-sm">
             <q-card dark bordered class="bg-red-7 my-card">
@@ -13,7 +13,7 @@
                     <div class="text-h3"> 170 </div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" color="red" label="MERON" />
+            <q-btn size="xl" style="width: 99%" color="red" push label="MERON" />
         </div>
 
         <div class="col q-gutter-sm">
@@ -28,7 +28,7 @@
                     <div class="text-h3"> 230 </div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" color="blue" label="WALA" />
+            <q-btn size="xl" style="width: 99%" color="blue" push label="WALA" />
         </div>
     </div>
   </div>
