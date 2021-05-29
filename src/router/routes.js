@@ -4,7 +4,7 @@ const routes = [
     path: '/',
     component: () => import('src/layouts/blank.vue'),
     children: [
-      { path: '', component: () => import('pages/Login/login.vue') }
+      { path: '', component: () => import('pages/Login/Index.vue') }
     ]
   },
 
@@ -12,17 +12,17 @@ const routes = [
     path: '/admin',
     component: () => import('layouts/AdminLayout.vue'),
     children: [
-      { path: 'home', component: () => import('pages/Admin/index.vue') },
-      { path: 'control_panel', component: () => import('pages/Admin/control.vue') },
-      { path: 'big_screen', component: () => import('pages/Admin/big_screen.vue') }
+      { path: 'home', component: () => import('pages/Admin/Index.vue') },
+      { path: 'control-panel', component: () => import('pages/Admin/ControlPanel.vue') },
+      { path: 'big-screen', component: () => import('pages/Admin/BigScreen.vue') },
+      { path: 'settings', component: () => import('pages/Admin/Setting.vue') }
     ]
   },
-
   {
     path: '/cashier',
     component: () => import('layouts/AdminLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Cashier/index.vue') }
+      { path: '', component: () => import('pages/Cashier/Index.vue') }
     ]
   },
 

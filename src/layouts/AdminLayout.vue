@@ -55,13 +55,13 @@ const menuList = [
     icon: 'grid_view',
     label: 'Control Panel',
     separator: false,
-    route: '/admin/control_panel'
+    route: '/admin/control-panel'
   },
   {
     icon: 'tv',
     label: 'Big Screen',
     separator: false,
-    route: '/admin/big_screen'
+    route: '/admin/big-screen'
   },
   {
     icon: 'settings',

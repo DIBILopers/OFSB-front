@@ -1,141 +1,123 @@
 <template>
-  <div class="q-pa-md q-gutter-lg">
+  <div class="q-pa-md q-gutter-md">
+    <!-- <q-btn color="primary" label="Primary" @click="getUserData" /> -->
+    <q-btn class="row align-center" @click="modal.generate = true" color="green" text-color="white" label="Generate Matches" icon="add" align="right" />
+    <q-dialog v-model="modal.generate" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Enter number of matches</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input outlined dense v-model="numberOfmatches" type="number" autofocus @keyup.enter="prompt = false" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn color="green" label="Generate" @click="modal.confirmGenerate = true, modal.generate = false" />
+          <q-btn color="red" label="Cancel" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="modal.confirmGenerate" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6"><q-icon name="warning" class="text-red" style="font-size: 3rem;" />Enter password to confirm</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="password" autofocus @keyup.enter="prompt = false" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn @click="generate" color="green" flat label="Confirm" v-close-popup />
+          <q-btn color="red" flat label="Cancel" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
     <div id="history">
         <q-table
             class="my-sticky-column-table"
             title="History"
-            :data="data"
+            :data="user_data"
             :columns="columns"
             row-key="name"
         />
     </div>
   </div>
 </template>
-
 <script>
+import { axiosCont } from 'boot/axios'
+
 export default {
   data () {
     return {
       modal: {
-        bground: ''
+        bground: '',
+        confirmGenerate: false,
+        generate: false
       },
-      winnerPop: false,
-      started: false,
-      oddedit: false,
-      meron: 100,
-      wala: 10,
+      numberOfmatches: 0,
+      password: '',
+      save: false,
+      fullname: '',
+      address: '',
+      role: '',
       winner: '',
       columns: [
         {
-          name: 'Match Number',
+          name: 'Id',
           required: true,
           label: 'Match Number',
           align: 'center',
-          field: 'id',
+          field: 'Id',
           format: val => `${val}`,
           sortable: true
         },
         {
           name: 'name',
           required: true,
-          label: 'Match',
+          label: 'Match Number',
           align: 'center',
-          field: row => row.name,
+          field: 'name',
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'meron',
+          name: 'role',
+          required: true,
+          label: 'Match Number',
           align: 'center',
-          label: 'Meron',
-          field: 'meron',
-          sortable: true
-        },
-        {
-          name: 'wala',
-          align: 'center',
-          label: 'Wala',
-          field: 'wala',
-          sortable: true
-        },
-        {
-          name: 'winner',
-          align: 'center',
-          label: 'Winner',
-          field: 'winner',
-          sortable: true
-        },
-        {
-          name: 'total',
-          align: 'center',
-          label: 'Total Bet',
-          field: 'total',
+          field: 'role',
+          format: val => `${val}`,
           sortable: true
         }
       ],
 
-      data: [
-        {
-          id: '1',
-          name: 'Twice vs Momoland',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '2',
-          name: 'Twice vs Blackpink',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '3',
-          name: 'Twice vs Itzy',
-          meron: 170,
-          wala: 230,
-          winner: 'Draw',
-          total: 500000
-        },
-        {
-          id: '4',
-          name: 'Twice vs BTS',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '5',
-          name: 'Twice vs Izone',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '6',
-          name: 'Twice vs Mamamoo',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '7',
-          name: 'Twice vs Redvelvet',
-          meron: 170,
-          wala: 230,
-          winner: 'Redvelvet',
-          total: 500000
-        }
-      ]
+      user_data: []
     }
   },
   methods: {
+    getUserData () {
+      axiosCont.get('user/data', {
+
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.user_data = response.data
+      })
+    },
+    generate () {
+      axiosCont.post('matches/generate', {
+        matches: this.numberOfmatches,
+        password: this.password
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.user_data = response.data
+      })
+    },
     displayWinner (text) {
       console.log(text)
       if (text === 'meron') {
@@ -154,6 +136,9 @@ export default {
     editOdd () {
       this.oddedit = false
     }
+  },
+  mounted () {
+    this.getUserData()
   }
 }
 </script>
