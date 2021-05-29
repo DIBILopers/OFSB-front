@@ -61,7 +61,7 @@
    <q-card>
        <q-card-section class="row q-gutter-md">
         <div class="col-5 q-gutter-sm">
-          <q-input outlined v-model="nickname" label="Nickname" />
+          <!-- <q-input outlined v-model="nickname" label="Nickname" /> -->
           <q-input outlined v-model="bet" label="Bet" />
             <q-card-actions align="right">
              <q-btn class="full-width" icon="monetization_on" label="Bet" color="green" v-close-popup />
@@ -70,7 +70,7 @@
         <div class="q-pa-md col bg-">
           <q-list bordered separator>
             <q-item >
-              <q-item-label v-model="sultada">Sultada # 24 -- May 20, 2021 / 1:03.00 PM</q-item-label>
+              <q-item-label align="center" v-model="sultada">Sultada # 24 <br/> <br/> May 20, 2021 / 1:03.00 PM </q-item-label>
             </q-item>
             <q-item >
                 <q-item-label v-model="betside">Bet Side <b class="text-red">WALA</b></q-item-label>
