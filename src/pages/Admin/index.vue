@@ -12,7 +12,6 @@
                 <q-radio v-model="role" val="cashier" label="Cashier" color="red" />
                 <q-radio v-model="role" val="admin" label="Admin" color="blue" />
                 </q-card-section>
-
                 <q-card-actions align="right">
                 <q-btn :disable="savestart" @click="save = true" label="Save" color="green" v-close-popup />
                 <q-btn label="Cancel" color="primary" v-close-popup />
@@ -44,6 +43,7 @@
 </template>
 <script>
 import { axiosCont } from 'boot/axios'
+
 export default {
   data () {
     return {
