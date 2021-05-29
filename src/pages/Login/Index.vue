@@ -6,14 +6,12 @@
             <q-card-section class="top-login-bar text-white">
               <div class="text-h3 text-center"> Login </div>
             </q-card-section>
-
             <q-card-section class="text-white" style="margin-top:20px;">
               <q-input color="" dark v-model="form.email" type="email" class="text-white">
                 <template v-slot:prepend>
                   <q-icon name="mail" />
                 </template>
               </q-input>
-
               <q-input color="" dark v-model="form.password" :type="isPwd ? 'password' : 'text'">
                 <template v-slot:prepend>
                   <q-icon name="vpn_key" />
@@ -26,13 +24,10 @@
                   />
                 </template>
               </q-input>
-
             </q-card-section>
-
             <q-card-actions align="right">
               <q-btn color="grey-3" class="full-width text-black" label="Login" />
             </q-card-actions>
-
           </q-card>
         </div>
       </div>
