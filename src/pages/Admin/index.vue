@@ -1,35 +1,41 @@
 <template>
   <div class="q-pa-md q-gutter-md">
     <!-- <q-btn color="primary" label="Primary" @click="getUserData" /> -->
-       <q-btn class="row align-center" :disable="started" @click="oddedit = true" color="white" text-color="black" label="Register" icon="edit" align="right" />
-      <div id="oddss" class="row q-gutter-xs text-center col">
-        <q-dialog v-model="oddedit" persistent class="col">
-            <q-card>
-                <q-card-section class="col-4 items-right q-gutter-md">
-                <q-input class="" type="text" outlined color="black" v-model="fullname" label="Full Name" />
-                <q-input class="" type="text" outlined color="black" v-model="address" label="Address" />
-                <q-input class="" type="text" outlined color="black" v-model="contactnumber" label="Contact Number" />
-                <q-radio v-model="role" val="cashier" label="Cashier" color="red" />
-                <q-radio v-model="role" val="admin" label="Admin" color="blue" />
-                </q-card-section>
-                <q-card-actions align="right">
-                <q-btn :disable="savestart" @click="save = true" label="Save" color="green" v-close-popup />
-                <q-btn label="Cancel" color="primary" v-close-popup />
-        <q-dialog v-model="save" persistent class="col-4">
-            <q-card>
-                <q-card-section class="col q-gutter-md">
-                 <q-label >Successfully Saved!</q-label>
-                <!-- <q-label v-model="fullname">{{fullname}}</q-label>
-                <q-label v-model="address">{{address}}</q-label>
-                <q-label v-model="contactnumber">{{contactnumber}}</q-label> -->
-                <q-btn class="col" size="sm" align="center" label="Okay" color="primary" v-close-popup />
-                </q-card-section>
-            </q-card>
-        </q-dialog>
-                </q-card-actions>
-            </q-card>
-        </q-dialog>
-    </div>
+    <q-btn class="row align-center" @click="modal.generate = true" color="green" text-color="white" label="Generate Matches" icon="add" align="right" />
+    <q-dialog v-model="modal.generate" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Enter number of matches</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input outlined dense v-model="numberOfmatches" type="number" autofocus @keyup.enter="prompt = false" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn color="green" label="Generate" @click="modal.confirmGenerate = true, modal.generate = false" />
+          <q-btn color="red" label="Cancel" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="modal.confirmGenerate" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6"><q-icon name="warning" class="text-red" style="font-size: 3rem;" />Enter password to confirm</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="password" autofocus @keyup.enter="prompt = false" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn @click="generate" color="green" flat label="Confirm" v-close-popup />
+          <q-btn color="red" flat label="Cancel" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     <div id="history">
         <q-table
             class="my-sticky-column-table"
@@ -48,12 +54,12 @@ export default {
   data () {
     return {
       modal: {
-        bground: ''
+        bground: '',
+        confirmGenerate: false,
+        generate: false
       },
-      winnerPop: false,
-      started: false,
-      oddedit: false,
-      savestart: false,
+      numberOfmatches: 0,
+      password: '',
       save: false,
       fullname: '',
       address: '',
@@ -94,8 +100,18 @@ export default {
   },
   methods: {
     getUserData () {
-      axiosCont.get('http://localhost:8000/user/data', {
+      axiosCont.get('user/data', {
 
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.user_data = response.data
+      })
+    },
+    generate () {
+      axiosCont.post('matches/generate', {
+        matches: this.numberOfmatches,
+        password: this.password
       }).then(response => {
         console.log('this respo')
         console.log(response.data)
