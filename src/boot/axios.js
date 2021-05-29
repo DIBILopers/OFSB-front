@@ -1,4 +1,7 @@
-import Vue from 'vue'
 import axios from 'axios'
 
-Vue.prototype.$axios = axios
+const axiosCont = axios.create({
+  baseURL: 'http://localhost:8000/'
+})
+
+export { axiosCont }
