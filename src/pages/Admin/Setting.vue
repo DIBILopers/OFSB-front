@@ -4,7 +4,7 @@
         <div id="oddss" class="row q-gutter-xs text-center col">
             <q-dialog v-model="oddEdit"  persistent>
                 <q-card dark class="q-pa-sm" style="width: 400px; background: rgba(0,0,0, 0.78)">
-                    <q-card-section class="col-4 items-right q-gutter-md"> {
+                    <q-card-section class="col-4 items-right q-gutter-md">
                     <div class="text-h6 text-amber-7">ADD USERS</div>
                     <q-input dark filled color="grey-7" v-model="fullName" label="Full Name" />
                     <q-input dark v-model="password" color="grey-7" label="Password" filled :type="isPwd ? 'password' : 'text'">
@@ -114,7 +114,7 @@ export default {
       console.log(this.fullName)
       console.log(this.password)
       console.log(this.roles)
-      axiosCont.get('http://localhost:8000/user/data', {
+      axiosCont.get('user/data', {
 
       }).then(response => {
         console.log(response.data)

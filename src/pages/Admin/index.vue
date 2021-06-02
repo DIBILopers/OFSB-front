@@ -3,30 +3,30 @@
     <!-- <q-btn color="primary" label="Primary" @click="getUserData" /> -->
     <q-btn class="row align-center" @click="modal.generate = true" color="green" text-color="white" label="Generate Matches" icon="add" align="right" />
     <q-dialog v-model="modal.generate" persistent>
-      <q-card style="min-width: 350px">
+      <q-card dark class="q-pa-sm" style="min-width: 350px; width: 400px; background: rgba(0,0,0, 0.60)">
         <q-card-section>
-          <div class="text-h6">Enter number of matches</div>
+          <div class="text-h6 text-white">Enter number of matches</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input outlined dense v-model="numberOfmatches" type="number" autofocus @keyup.enter="prompt = false" />
+          <q-input dark outlined dense v-model="numberOfmatches" type="number" autofocus @keyup.enter="prompt = false" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn color="green" label="Generate" @click="modal.confirmGenerate = true, modal.generate = false" />
-          <q-btn color="red" label="Cancel" v-close-popup />
+          <q-btn flat color="green" label="Generate" @click="modal.confirmGenerate = true, modal.generate = false" />
+          <q-btn flat color="red" label="Cancel" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <q-dialog v-model="modal.confirmGenerate" persistent>
-      <q-card style="min-width: 350px">
+      <q-card dark class="q-pa-sm" style="min-width: 350px; width: 400px; background: rgba(0,0,0, 0.60)" >
         <q-card-section>
           <div class="text-h6"><q-icon name="warning" class="text-red" style="font-size: 3rem;" />Enter password to confirm</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input dense v-model="password" autofocus @keyup.enter="prompt = false" />
+          <q-input dark dense v-model="password" autofocus @keyup.enter="prompt = false" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -36,14 +36,44 @@
       </q-card>
     </q-dialog>
 
+    <div class="text-h5">Matches</div>
     <div id="history">
-        <q-table
-            class="my-sticky-column-table"
-            title="History"
-            :data="user_data"
-            :columns="columns"
-            row-key="name"
-        />
+      <q-table
+          title="Matches"
+          :data="matchData"
+          :columns="columns"
+          :filter="matchTable.filter"
+          :loading="matchTable.loading"
+          row-key="name"
+      >
+          <template v-slot:top>
+              <q-btn unelevated outline class="bg-green glossy text-white" @click="oddEdit = true" label="Register" icon="add" />
+              <q-space />
+              <q-input borderless dense debounce="300" filled color="grey-7" placeholder="Search" v-model="matchTable.filter">
+                  <template v-slot:append>
+                      <q-icon name="search" />
+                  </template>
+              </q-input>
+          </template>
+          <template v-slot:body="props">
+              <q-tr :props="props">
+                  <q-td key="match_number" :props="props">{{ props.row.match_number }}</q-td>
+                  <q-td key="meron_odd" :props="props">{{ props.row.meron_odd }}</q-td>
+                  <q-td key="wala_odd" :props="props">{{ props.row.wala_odd }}</q-td>
+                  <q-td key="meron_total" :props="props">{{ props.row.meron_total }}</q-td>
+                  <q-td key="wala_total" :props="props">{{ props.row.wala_total }}</q-td>
+                  <q-td key="winner" :props="props">{{ props.row.winner }}</q-td>
+                  <q-td key="action" :props="props" class="q-gutter-xs">
+                      <q-btn color="green-6" class="btn-action"  @click="oddEdit = true" :disable="matchTable.tableLoading" icon="edit" size="sm" dense flat>
+                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Update</q-tooltip>
+                      </q-btn>
+                      <q-btn color="red-6" class="btn-action" :disable="matchTable. tableLoading" icon="delete" size="sm" dense flat>
+                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Delete</q-tooltip>
+                      </q-btn>
+                  </q-td>
+              </q-tr>
+          </template>
+      </q-table>
     </div>
   </div>
 </template>
@@ -53,6 +83,11 @@ import { axiosCont } from 'boot/axios'
 export default {
   data () {
     return {
+      matchTable: {
+        loading: false,
+        filter: null,
+        tableLoading: false
+      },
       modal: {
         bground: '',
         confirmGenerate: false,
@@ -67,55 +102,83 @@ export default {
       winner: '',
       columns: [
         {
-          name: 'Id',
+          name: 'match_number',
           required: true,
           label: 'Match Number',
           align: 'center',
-          field: 'Id',
+          field: 'match_number',
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'name',
+          name: 'meron_odd',
           required: true,
-          label: 'Match Number',
+          label: 'Meron Odd',
           align: 'center',
-          field: 'name',
+          field: 'meron_odd',
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'role',
+          name: 'wala_odd',
           required: true,
-          label: 'Match Number',
+          label: 'Wala Odd',
           align: 'center',
-          field: 'role',
+          field: 'wala_odd',
+          format: val => `${val}`,
+          sortable: true
+        },
+        {
+          name: 'meron_total',
+          required: true,
+          label: 'Meron Bets',
+          align: 'center',
+          field: 'meron_total',
+          format: val => `${val}`,
+          sortable: true
+        },
+        {
+          name: 'wala_total',
+          required: true,
+          label: 'Wala Bets',
+          align: 'center',
+          field: 'wala_total',
+          format: val => `${val}`,
+          sortable: true
+        },
+        {
+          name: 'winner',
+          required: true,
+          label: 'Winner',
+          align: 'center',
+          field: 'winner',
           format: val => `${val}`,
           sortable: true
         }
       ],
 
-      user_data: []
+      matchData: []
     }
   },
   methods: {
-    getUserData () {
-      axiosCont.get('user/data', {
+    getMatchData () {
+      axiosCont.get('matches/getdata', {
 
       }).then(response => {
         console.log('this respo')
         console.log(response.data)
-        this.user_data = response.data
+        this.matchData = response.data
       })
     },
     generate () {
       axiosCont.post('matches/generate', {
-        matches: this.numberOfmatches,
+        number_of_matches: this.numberOfmatches,
         password: this.password
       }).then(response => {
-        console.log('this respo')
-        console.log(response.data)
+        this.matchTable.loading = true
         this.user_data = response.data
+        this.getMatchData()
+        this.matchTable.loading = false
       })
     },
     displayWinner (text) {
@@ -138,7 +201,7 @@ export default {
     }
   },
   mounted () {
-    this.getUserData()
+    this.getMatchData()
   }
 }
 </script>
