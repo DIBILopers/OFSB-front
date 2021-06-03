@@ -13,7 +13,7 @@
             </q-card-section>
         </q-card>
     </div>
-    <div id="oddss"  class="row q-gutter-xs text-center">
+    <div id="oddss" class="row q-gutter-xs text-center">
         <div class="col q-gutter-sm">
             <q-card dark bordered class="bg-red-7 q-pa-md my-card">
                 <q-card-section>
