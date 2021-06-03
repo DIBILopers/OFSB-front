@@ -74,7 +74,7 @@
               <q-item-label>Bet Prize: <strong>{{ betprize }}</strong></q-item-label>
             </q-item>
             <q-item >
-                <q-item-label>Total Payout: <strong>{{ totalpayout }}</strong></q-item-label>
+                <q-item-label>Total Payout: <strong>{{ computedBet }}</strong></q-item-label>
             </q-item>
               <q-card-actions align="left">
                 <q-btn label="Print" icon="print" color="green" v-close-popup />
@@ -145,6 +145,11 @@ export default {
       this.totalpayout = parseInt(this.betprize) + parseInt(this.betamount)
       this.disabe_betting = true
       // console.log(this.betamount * oddPercentage)
+    }
+  },
+  computed: {
+    computedBet () {
+      return (parseInt(this.betamount) * (this.odds - 100) / 100) + parseInt(this.betamount)
     }
   },
   mounted () {
