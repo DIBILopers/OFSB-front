@@ -1,8 +1,21 @@
 <template>
   <div class="q-pa-md q-gutter-lg">
+    <div id="match" class="row q-gutter-xs text-center">
+        <q-card dark bordered class="col text-black bg-white my-card">
+            <q-card-section>
+                <div class="text-h3">Match #</div>
+            </q-card-section>
+
+            <q-separator dark inset />
+
+            <q-card-section>
+                <div class="text-h1 text-red">{{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</div>
+            </q-card-section>
+        </q-card>
+    </div>
     <div id="oddss"  class="row q-gutter-xs text-center">
         <div class="col q-gutter-sm">
-            <q-card dark bordered class="bg-red-7 my-card">
+            <q-card dark bordered class="bg-red-7 q-pa-md my-card">
                 <q-card-section>
                     <div class="text-h2" style="font-size:7vw;">MERON</div>
                 </q-card-section>
@@ -10,14 +23,14 @@
                 <q-separator dark inset />
 
                 <q-card-section>
-                    <div class="text-h3"> 170 </div>
+                    <div class="text-h3"> {{ current_data === null ? 'NO MATCHES' : current_data.meron_odd }} </div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" color="red" label="MERON" />
+            <q-btn size="xl" color="red" label="MERON" @click="chooseSide('MERON')" />
         </div>
 
         <div class="col q-gutter-sm">
-            <q-card dark bordered class="bg-blue-7 my-card">
+            <q-card dark bordered class="bg-blue-7 q-pa-md my-card">
                 <q-card-section>
                     <div class="text-h2" style="font-size:7vw;" >WALA</div>
                 </q-card-section>
@@ -25,67 +38,43 @@
                 <q-separator dark inset />
 
                 <q-card-section>
-                    <div class="text-h3"> 230 </div>
+                    <div class="text-h3"> {{ current_data === null ? 'NO MATCHES' : current_data.wala_odd }} </div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" color="blue" label="WALA" />
+            <q-btn size="xl" color="blue" label="WALA" @click="chooseSide('WALA')" />
         </div>
     </div>
-     <!-- <div id="oddss" class="row">
-        <q-dialog v-model="oddedit" persistent class="">
-            <q-card>
-                <q-card-section class="row text- q-gutter-md">
-                  <div class="q-pa-md" style="max-width: 350px">
-                    <q-list  separator>
-                      <q-item >
-                        <q-item-label v-model="sultada">Sultada # 24</q-item-label>
-                      </q-item>
-                      <q-item >
-                          <q-item-label v-model="betside">Bet Side <b>WALA</b></q-item-label>
-                      </q-item>
-                    </q-list>
-                  </div>
-                </q-card-section>
-                  <q-card-section class="row">
-                  <q-input outlined v-model="nickname" label="Nickname" />
-                  <q-input outlined v-model="bet" label="Bet" />
-                </q-card-section>
-
-                <q-card-actions align="right">
-                <q-btn label="Save" color="green" v-close-popup />
-                <q-btn label="Cancel" color="primary" v-close-popup />
-                </q-card-actions>
-            </q-card>
-        </q-dialog>
-  </div> -->
    <q-card>
        <q-card-section class="row q-gutter-md">
         <div class="col-5 q-gutter-sm">
           <!-- <q-input outlined v-model="nickname" label="Nickname" /> -->
-          <q-input outlined v-model="bet" label="Bet" />
+          <q-input :disable="disabe_betting" outlined v-model="betamount" label="Bet" />
             <q-card-actions align="right">
-             <q-btn class="full-width" icon="monetization_on" label="Bet" color="green" v-close-popup />
+             <q-btn :disable="disabe_betting" class="full-width" icon="monetization_on" @click="createBet" label="Bet" color="green" v-close-popup />
            </q-card-actions>
         </div>
         <div class="q-pa-md col bg-">
-          <q-list bordered separator>
+          <q-list bordered padding>
             <q-item >
-              <q-item-label align="center" v-model="sultada">Sultada # 24 <br/> <br/> May 20, 2021 / 1:03.00 PM </q-item-label>
+              <q-item-label align="" v-model="sultada" class="text-h5">Sultada # {{ current_data === null ? 'NO MATCHES' : current_data.match_number }} </q-item-label>
             </q-item>
             <q-item >
-                <q-item-label v-model="betside">Bet Side <b class="text-red">WALA</b></q-item-label>
+              <q-item-label align="" v-model="sultada">May 20, 2021 / 1:03.00 PM</q-item-label>
+            </q-item>
+            <q-item >
+                <q-item-label>Bet Side:  <b :class="bet_color">{{ betside }}</b></q-item-label>
             </q-item>
               <q-item >
-              <q-item-label v-model="odds"> Odds:</q-item-label>
+              <q-item-label v-model="odds"> Odds: {{ odds }}</q-item-label>
             </q-item>
             <q-item >
                 <q-item-label v-model="betamount">Bet Amount: <strong>{{ betamount }}</strong></q-item-label>
             </q-item>
               <q-item >
-              <q-item-label v-model="betprize">Bet Prize</q-item-label>
+              <q-item-label>Bet Prize: <strong>{{ betprize }}</strong></q-item-label>
             </q-item>
             <q-item >
-                <q-item-label v-model="totalpayout">Total Payout:</q-item-label>
+                <q-item-label>Total Payout: <strong>{{ totalpayout }}</strong></q-item-label>
             </q-item>
               <q-card-actions align="left">
                 <q-btn label="Print" icon="print" color="green" v-close-popup />
@@ -99,139 +88,67 @@
 </template>
 
 <script>
+import { axiosCont } from 'boot/axios'
+
 export default {
   data () {
     return {
       modal: {
         bground: ''
       },
+      betside: '',
+      bet_color: '',
+      loading: true,
       winnerPop: false,
       started: false,
       oddedit: false,
-      bet: 50000,
+      bet: 0,
       sultada: '#23',
       nickname: 'bords',
-      betamount: 5000,
-      betprize: 3000,
-      odds: 170,
-      totalpayout: 8000,
+      betamount: 0,
+      disabe_betting: true,
+      betprize: 0,
+      odds: 0,
+      totalpayout: 0,
       winner: '',
-      columns: [
-        {
-          name: 'Match Number',
-          required: true,
-          label: 'Match Number',
-          align: 'center',
-          field: 'id',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'name',
-          required: true,
-          label: 'Match',
-          align: 'center',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'meron',
-          align: 'center',
-          label: 'Meron',
-          field: 'meron',
-          sortable: true
-        },
-        {
-          name: 'wala',
-          align: 'center',
-          label: 'Wala',
-          field: 'wala',
-          sortable: true
-        },
-        {
-          name: 'winner',
-          align: 'center',
-          label: 'Winner',
-          field: 'winner',
-          sortable: true
-        },
-        {
-          name: 'total',
-          align: 'center',
-          label: 'Total Bet',
-          field: 'total',
-          sortable: true
-        }
-      ],
-
-      data: [
-        {
-          id: '1',
-          name: 'Twice vs Momoland',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '2',
-          name: 'Twice vs Blackpink',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '3',
-          name: 'Twice vs Itzy',
-          meron: 170,
-          wala: 230,
-          winner: 'Draw',
-          total: 500000
-        },
-        {
-          id: '4',
-          name: 'Twice vs BTS',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '5',
-          name: 'Twice vs Izone',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '6',
-          name: 'Twice vs Mamamoo',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '7',
-          name: 'Twice vs Redvelvet',
-          meron: 170,
-          wala: 230,
-          winner: 'Redvelvet',
-          total: 500000
-        }
-      ]
+      meron: 0,
+      wala: 0,
+      ended: 0,
+      current_data: []
     }
   },
   methods: {
-    startmatch () {
-      this.started = true
+    getCurrentMatch () {
+      this.loading = true
+      axiosCont.get('matches/current', {
+
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.current_data = response.data
+        this.meron = this.current_data === null ? 0 : this.current_data.meron_odd
+        this.wala = this.current_data === null ? 0 : this.current_data.wala_odd
+        this.ended = this.current_data === null
+        this.loading = false
+        // window.location.reload()
+      })
     },
-    editOdd () {
-      this.oddedit = false
+    chooseSide (text) {
+      this.betside = text
+      this.bet_color = text === 'MERON' ? 'text-h6 text-red' : 'text-h6 text-blue'
+      this.odds = text === 'MERON' ? this.current_data.meron_odd : this.current_data.wala_odd
+      this.disabe_betting = false
+    },
+    createBet () {
+      const oddPercentage = (this.odds - 100) / 100
+      this.betprize = parseInt(this.betamount) * oddPercentage
+      this.totalpayout = parseInt(this.betprize) + parseInt(this.betamount)
+      this.disabe_betting = true
+      // console.log(this.betamount * oddPercentage)
     }
+  },
+  mounted () {
+    this.getCurrentMatch()
   }
 }
 </script>

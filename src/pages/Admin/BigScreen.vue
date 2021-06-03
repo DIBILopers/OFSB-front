@@ -1,6 +1,7 @@
 <template>
-  <div class="q-pa-md q-gutter-lg">
-    <div id="match" class="row q-gutter-xs text-center">
+  <div class="q-pa-md row q-gutter-lg">
+    <div class="container col">
+      <div id="match" class="row q-gutter-xs text-center">
         <q-card dark bordered class="col text-black bg-white my-card">
             <q-card-section>
                 <div class="text-h3">Match #</div>
@@ -9,59 +10,36 @@
             <q-separator dark inset />
 
             <q-card-section>
-                <div class="text-h1">{{ this.current_data.match_number }}</div>
+                <div class="text-h1 text-red">{{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</div>
             </q-card-section>
         </q-card>
-    </div>
-    <div id="oddss" class="row q-gutter-xs text-center">
-        <q-card dark bordered class="col bg-red-7 my-card">
-            <q-card-section>
-                <div class="text-h1">MERON</div>
-            </q-card-section>
+      </div>
+      <div id="oddss" class="row q-gutter-xs q-mt-md text-center">
+          <q-card dark bordered class="col bg-red-7 my-card">
+              <q-card-section>
+                  <div class="text-h1">MERON</div>
+              </q-card-section>
 
-            <q-separator dark inset />
+              <q-separator dark inset />
 
-            <q-card-section>
-                <div class="text-h3">{{ this.current_data.meron_odd }}</div>
-            </q-card-section>
-        </q-card>
+              <q-card-section>
+                  <div class="text-h3">{{ current_data === null ? 0 : current_data.meron_odd }}</div>
+              </q-card-section>
+          </q-card>
 
-        <q-card dark bordered class="col bg-blue-7 my-card">
-            <q-card-section>
-                <div class="text-h1">WALA</div>
-            </q-card-section>
+          <q-card dark bordered class="col bg-blue-7 my-card">
+              <q-card-section>
+                  <div class="text-h1">WALA</div>
+              </q-card-section>
 
-            <q-separator dark inset />
+              <q-separator dark inset />
 
-            <q-card-section>
-                <div class="text-h3">{{ this.current_data.wala_odd }}</div>
-            </q-card-section>
-        </q-card>
-    </div>
-
-    <div id="list" class="row q-gutter-xs ">
-        <q-list class="col" bordered separator>
-          <q-item clickable v-ripple>
-            <q-item-section>Meron</q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section>
-              <q-item-label>Item with caption</q-item-label>
-              <q-item-label caption>Caption</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section>
-              <q-item-label overline>OVERLINE</q-item-label>
-              <q-item-label>Item with caption</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-    </div>
-    <q-btn color="primary" @click="winnerPop = true" label="Primary" />
-    <div id="oddss" class="row q-gutter-xs text-center">
+              <q-card-section>
+                  <div class="text-h3">{{ current_data === null ? 0 : current_data.wala_odd }}</div>
+              </q-card-section>
+          </q-card>
+      </div>
+      <div id="oddss" class="row q-gutter-xs text-center">
         <q-dialog v-model="winnerPop" persistent>
             <q-card>
                 <q-card-section class="q-pa-lg bg-red text-white row text-center q-gutter-md">
@@ -70,16 +48,26 @@
                 </q-card-section>
             </q-card>
         </q-dialog>
+      </div>
     </div>
-    <!-- <div id="history">
-        <q-table
-            class="my-sticky-column-table"
-            title="History"
-            :data="data"
-            :columns="columns"
-            row-key="name"
-        />
-    </div> -->
+    <div class="container col-3">
+      <div id="list" class="row ">
+        <!-- <div class="col"></div> -->
+        <div class="col q-gutter-sm">
+          <div bordered separator v-for="match in recent_data" :key="match.match_number">
+            <q-card v-if="match.winner == 'MERON'" class="bg-red text-white my-card q-pa-md text-center" >
+              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }}</q-card-section>
+            </q-card>
+            <q-card v-else-if="match.winner == 'WALA'" class="bg-blue text-white my-card q-pa-md text-center" >
+              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }}</q-card-section>
+            </q-card>
+            <q-card v-else-if="match.winner == 'DRAW'" class="bg-green text-white my-card q-pa-md text-center" >
+              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }}</q-card-section>
+            </q-card>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -104,62 +92,7 @@ export default {
       password: '',
       save: false,
       current_data: [],
-      columns: [
-        {
-          name: 'match_number',
-          required: true,
-          label: 'Match Number',
-          align: 'center',
-          field: 'match_number',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'meron_odd',
-          required: true,
-          label: 'Meron Odd',
-          align: 'center',
-          field: 'meron_odd',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'wala_odd',
-          required: true,
-          label: 'Wala Odd',
-          align: 'center',
-          field: 'wala_odd',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'meron_total',
-          required: true,
-          label: 'Meron Bets',
-          align: 'center',
-          field: 'meron_total',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'wala_total',
-          required: true,
-          label: 'Wala Bets',
-          align: 'center',
-          field: 'wala_total',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'winner',
-          required: true,
-          label: 'Winner',
-          align: 'center',
-          field: 'winner',
-          format: val => `${val}`,
-          sortable: true
-        }
-      ],
+      recent_data: [],
 
       matchData: []
     }
@@ -188,6 +121,17 @@ export default {
         this.matchTable.loading = false
       })
     },
+    getRecentMatch () {
+      this.matchTable.loading = true
+      axiosCont.get('matches/recent', {
+
+      }).then(response => {
+        console.log('recent')
+        console.log(response.data)
+        this.recent_data = response.data
+        this.matchTable.loading = false
+      })
+    },
     displayWinner (text) {
       console.log(text)
       if (text === 'meron') {
@@ -210,6 +154,7 @@ export default {
   mounted () {
     this.getMatchData()
     this.getCurrentMatch()
+    this.getRecentMatch()
     // this.matchTable.loading = false
   }
 }

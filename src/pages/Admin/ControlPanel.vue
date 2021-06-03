@@ -9,7 +9,7 @@
             <q-separator dark inset />
 
             <q-card-section>
-                <div class="text-h1 text-red">{{ this.current_data.match_number }}</div>
+                <div class="text-h1 text-red">{{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</div>
             </q-card-section>
         </q-card>
     </div>
@@ -23,7 +23,7 @@
                 <q-separator dark inset />
 
                 <q-card-section>
-                    <div class="text-h3">{{ this.current_data.meron_odd }}</div>
+                    <div class="text-h3">{{ current_data === null ? 'NO MATCHES' : current_data.meron_odd }}</div>
                 </q-card-section>
             </q-card>
             <!-- <q-btn class="q-mt-sm full-width" size="xl" :disable="!started" @click="displayWinner('meron')" color="red" label="MERON WINS" /> -->
@@ -38,7 +38,7 @@
                 <q-separator dark inset />
 
                 <q-card-section>
-                    <div class="text-h3">{{ this.current_data.wala_odd }}</div>
+                    <div class="text-h3">{{ current_data === null ? 'NO MATCHES' : current_data.wala_odd }}</div>
                 </q-card-section>
             </q-card>
             <!-- <q-btn class="q-mt-sm full-width" size="xl" :disable="!started" @click="displayWinner('wala')" color="primary" label="WALA WINS" /> -->
@@ -47,13 +47,13 @@
 
     <div id="odds-button" class="row q-pa q-gutter-sm text-center">
         <div class="col ">
-          <q-btn class="full-width" size="xl" :disable="!started" @click="displayWinner('meron')" color="red" label="MERON WINS" />
+          <q-btn class="full-width" size="xl" :disable="!started || ended" @click="displayWinner('meron')" color="red" label="MERON WINS" />
         </div>
         <div class="col ">
-          <q-btn class="full-width" size="xl" :disable="!started" @click="displayWinner('draw')" color="green" label="Draw" />
+          <q-btn class="full-width" size="xl" :disable="!started || ended" @click="displayWinner('draw')" color="green" label="Draw" />
         </div>
         <div class="col ">
-          <q-btn class="full-width" size="xl" :disable="!started" @click="displayWinner('wala')" color="primary" label="WALA WINS" />
+          <q-btn class="full-width" size="xl" :disable="!started || ended" @click="displayWinner('wala')" color="primary" label="WALA WINS" />
         </div>
     </div>
 
@@ -69,8 +69,8 @@
 
     <div id="control" class="row q-gutter-xs text-center">
         <div bordered class="col q-gutter-sm bg-white ">
-          <q-btn size="xl" :disable="started" @click="oddedit = true" color="primary" label="Edit Odds" icon="edit" />
-          <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" :label="started? 'Match Started' : 'Start Match'" />
+          <q-btn size="xl" :disable="started || ended" @click="oddedit = true" color="primary" label="Edit Odds" icon="edit" />
+          <q-btn size="xl" :disable="started || ended" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" :label="started? 'Match Started' : 'Start Match'" />
             <!-- <q-btn size="xl" :disable="!started" @click="endmatch" color="red" label="End Match" /> -->
         </div>
     </div>
@@ -82,8 +82,8 @@
               <div class="text-h6 text-white">EDIT ODDS</div>
             </q-card-section>
             <q-card-section class="q-gutter-md">
-              <q-input dark class="text-h5" type="number" outlined color="red" v-model="current_data.meron_odd" label="Meron" />
-              <q-input dark class="text-h5" outlined type="number" v-model="current_data.wala_odd" label="Wala" />
+              <q-input dark class="text-h5" type="number" outlined color="red" v-model="meron" label="Meron" />
+              <q-input dark class="text-h5" outlined type="number" v-model="wala" label="Wala" />
             </q-card-section>
 
             <q-card-actions align="right">
@@ -209,6 +209,7 @@ export default {
       current_data: [],
       winnerPop: false,
       started: false,
+      ended: false,
       oddedit: false,
       meron: 100,
       wala: 100,
@@ -235,6 +236,9 @@ export default {
         console.log('this respo')
         console.log(response.data)
         this.current_data = response.data
+        this.meron = this.current_data === null ? 0 : this.current_data.meron_odd
+        this.wala = this.current_data === null ? 0 : this.current_data.wala_odd
+        this.ended = this.current_data === null
         this.matchTable.loading = false
         // window.location.reload()
       })
@@ -246,20 +250,23 @@ export default {
       }).then(response => {
         console.log('next')
         console.log(response.data)
-        this.getCurrentMatch()
+        if (response.data !== 'NO MORE MATCHES') {
+          this.getCurrentMatch()
+        }
         // window.location.reload()
       })
     },
     editOdd () {
       this.oddedit = false
       axiosCont.put('matches/edit-odd/' + this.current_data.id, {
-        meron_odd: this.current_data.meron_odd,
-        wala_odd: this.current_data.wala_odd,
+        meron_odd: this.meron,
+        wala_odd: this.wala,
         match_number: this.current_data.match_number
       }).then(response => {
         console.log('save')
         console.log(response.data)
         this.current_data = response.data
+        this.getCurrentMatch()
       })
     },
     displayWinner (text) {
