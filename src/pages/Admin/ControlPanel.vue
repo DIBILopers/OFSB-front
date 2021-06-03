@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md q-gutter-lg">
+  <div class=" q-gutter-md">
     <div id="match" class="row q-gutter-xs text-center">
         <q-card dark bordered class="col text-black bg-white my-card">
             <q-card-section>
@@ -9,12 +9,12 @@
             <q-separator dark inset />
 
             <q-card-section>
-                <div class="text-h1">24</div>
+                <div class="text-h1 text-red">{{ this.current_data.match_number }}</div>
             </q-card-section>
         </q-card>
     </div>
-    <div id="oddss" class="row q-gutter-xs text-center">
-        <div class="col q-gutter-sm">
+    <div id="oddss" class="row text-center">
+        <div class="col">
             <q-card dark bordered class="bg-red-7 my-card">
                 <q-card-section>
                     <div class="text-h1">MERON</div>
@@ -23,13 +23,13 @@
                 <q-separator dark inset />
 
                 <q-card-section>
-                    <div class="text-h3">{{ meron }}</div>
+                    <div class="text-h3">{{ this.current_data.meron_odd }}</div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" :disable="!started" @click="displayWinner('meron')" color="red" label="MERON WINS" />
+            <!-- <q-btn class="q-mt-sm full-width" size="xl" :disable="!started" @click="displayWinner('meron')" color="red" label="MERON WINS" /> -->
         </div>
 
-        <div class="col q-gutter-sm">
+        <div class="col">
             <q-card dark bordered class="bg-blue-7 my-card">
                 <q-card-section>
                     <div class="text-h1">WALA</div>
@@ -38,16 +38,22 @@
                 <q-separator dark inset />
 
                 <q-card-section>
-                    <div class="text-h3">{{ wala }}</div>
+                    <div class="text-h3">{{ this.current_data.wala_odd }}</div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" :disable="!started" @click="displayWinner('wala')" color="primary" label="WALA WINS" />
+            <!-- <q-btn class="q-mt-sm full-width" size="xl" :disable="!started" @click="displayWinner('wala')" color="primary" label="WALA WINS" /> -->
         </div>
     </div>
 
-    <div id="oddss" class="row q-gutter-xs text-center">
-        <div class="col q-gutter-sm">
-            <q-btn size="xl" :disable="!started" @click="displayWinner('draw')" color="green" label="Draw" />
+    <div id="odds-button" class="row q-pa q-gutter-sm text-center">
+        <div class="col ">
+          <q-btn class="full-width" size="xl" :disable="!started" @click="displayWinner('meron')" color="red" label="MERON WINS" />
+        </div>
+        <div class="col ">
+          <q-btn class="full-width" size="xl" :disable="!started" @click="displayWinner('draw')" color="green" label="Draw" />
+        </div>
+        <div class="col ">
+          <q-btn class="full-width" size="xl" :disable="!started" @click="displayWinner('wala')" color="primary" label="WALA WINS" />
         </div>
     </div>
 
@@ -62,166 +68,200 @@
     </div>
 
     <div id="control" class="row q-gutter-xs text-center">
-        <div dark bordered class="col bg-white my-card ">
-            <q-card-section class="q-gutter-sm">
-                <q-btn size="xl" :disable="started" @click="oddedit = true" color="primary" label="Edit Odds" icon="edit" />
-                <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" :label="started? 'Match Started' : 'Start Match'" />
-                <!-- <q-btn size="xl" :disable="!started" @click="endmatch" color="red" label="End Match" /> -->
-            </q-card-section>
+        <div bordered class="col q-gutter-sm bg-white ">
+          <q-btn size="xl" :disable="started" @click="oddedit = true" color="primary" label="Edit Odds" icon="edit" />
+          <q-btn size="xl" :disable="started" @click="startmatch" color="amber-6" :icon="started ? 'pause' : 'play_arrow'" :label="started? 'Match Started' : 'Start Match'" />
+            <!-- <q-btn size="xl" :disable="!started" @click="endmatch" color="red" label="End Match" /> -->
         </div>
     </div>
 
     <div id="oddss" class="row q-gutter-xs text-center">
         <q-dialog v-model="oddedit" persistent class="col-8">
-            <q-card>
-                <q-card-section class="row items-center q-gutter-md">
-                <q-input class="" type="number" outlined color="red" v-model="meron" label="Meron" />
-                <q-input outlined type="number" v-model="wala" label="Wala" />
-                </q-card-section>
+          <q-card dark class="q-pa-sm" style="min-width: 550px; width: 400px; background: rgba(0,0,0, 0.80)">
+            <q-card-section>
+              <div class="text-h6 text-white">EDIT ODDS</div>
+            </q-card-section>
+            <q-card-section class="q-gutter-md">
+              <q-input dark class="text-h5" type="number" outlined color="red" v-model="current_data.meron_odd" label="Meron" />
+              <q-input dark class="text-h5" outlined type="number" v-model="current_data.wala_odd" label="Wala" />
+            </q-card-section>
 
-                <q-card-actions align="right">
-                <q-btn label="Save" color="green" v-close-popup />
-                <q-btn label="Cancel" color="primary" v-close-popup />
-                </q-card-actions>
-            </q-card>
+            <q-card-actions align="right">
+            <q-btn size="lg" label="Save" flat color="green" @click="editOdd" v-close-popup />
+            <q-btn size="lg" label="Cancel" flat color="primary" v-close-popup />
+            </q-card-actions>
+          </q-card>
         </q-dialog>
     </div>
 
+    <div class="text-h5">Matches</div>
     <div id="history">
-        <q-table
-            class="my-sticky-column-table"
-            title="History"
-            :data="data"
-            :columns="columns"
-            row-key="name"
-        />
+      <q-table
+          title="Matches"
+          :data="matchTable.data"
+          :columns="matchTable.columns"
+          :filter="matchTable.filter"
+          :loading="matchTable.loading"
+          row-key="name"
+      >
+          <template v-slot:top>
+              <q-input borderless dense debounce="300" filled color="grey-7" placeholder="Search" v-model="matchTable.filter">
+                  <template v-slot:append>
+                      <q-icon name="search" />
+                  </template>
+              </q-input>
+          </template>
+          <template v-slot:body="props">
+              <q-tr :props="props">
+                  <q-td key="match_number" :props="props">{{ props.row.match_number }}</q-td>
+                  <q-td key="meron_odd" :props="props">{{ props.row.meron_odd }}</q-td>
+                  <q-td key="wala_odd" :props="props">{{ props.row.wala_odd }}</q-td>
+                  <q-td key="meron_total" :props="props">{{ props.row.meron_total }}</q-td>
+                  <q-td key="wala_total" :props="props">{{ props.row.wala_total }}</q-td>
+                  <q-td key="winner" :props="props">{{ props.row.winner }}</q-td>
+                  <q-td key="action" :props="props" class="q-gutter-xs">
+                      <q-btn color="green-6" class="btn-action"  @click="oddEdit = true" :disable="matchTable.tableLoading" icon="edit" size="sm" dense flat>
+                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Update</q-tooltip>
+                      </q-btn>
+                      <q-btn color="red-6" class="btn-action" :disable="matchTable. tableLoading" icon="delete" size="sm" dense flat>
+                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Delete</q-tooltip>
+                      </q-btn>
+                  </q-td>
+              </q-tr>
+          </template>
+      </q-table>
     </div>
   </div>
 </template>
 
 <script>
+import { axiosCont } from 'boot/axios'
+
 export default {
   data () {
     return {
+      reloadPage: false,
+      matchTable: {
+        loading: false,
+        filter: null,
+        tableLoading: false,
+        data: [],
+        columns: [
+          {
+            name: 'match_number',
+            required: true,
+            label: 'Match Number',
+            align: 'center',
+            field: 'match_number',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'meron_odd',
+            required: true,
+            label: 'Meron Odd',
+            align: 'center',
+            field: 'meron_odd',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'wala_odd',
+            required: true,
+            label: 'Wala Odd',
+            align: 'center',
+            field: 'wala_odd',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'meron_total',
+            required: true,
+            label: 'Meron Bets',
+            align: 'center',
+            field: 'meron_total',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'wala_total',
+            required: true,
+            label: 'Wala Bets',
+            align: 'center',
+            field: 'wala_total',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'winner',
+            required: true,
+            label: 'Winner',
+            align: 'center',
+            field: 'winner',
+            format: val => `${val}`,
+            sortable: true
+          }
+        ]
+      },
       modal: {
         bground: ''
       },
+      current_data: [],
       winnerPop: false,
       started: false,
       oddedit: false,
       meron: 100,
       wala: 100,
-      winner: '',
-      columns: [
-        {
-          name: 'Match Number',
-          required: true,
-          label: 'Match Number',
-          align: 'center',
-          field: 'id',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'name',
-          required: true,
-          label: 'Match',
-          align: 'center',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'meron',
-          align: 'center',
-          label: 'Meron',
-          field: 'meron',
-          sortable: true
-        },
-        {
-          name: 'wala',
-          align: 'center',
-          label: 'Wala',
-          field: 'wala',
-          sortable: true
-        },
-        {
-          name: 'winner',
-          align: 'center',
-          label: 'Winner',
-          field: 'winner',
-          sortable: true
-        },
-        {
-          name: 'total',
-          align: 'center',
-          label: 'Total Bet',
-          field: 'total',
-          sortable: true
-        }
-      ],
-
-      data: [
-        {
-          id: '1',
-          name: 'Twice vs Momoland',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '2',
-          name: 'Twice vs Blackpink',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '3',
-          name: 'Twice vs Itzy',
-          meron: 170,
-          wala: 230,
-          winner: 'Draw',
-          total: 500000
-        },
-        {
-          id: '4',
-          name: 'Twice vs BTS',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '5',
-          name: 'Twice vs Izone',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '6',
-          name: 'Twice vs Mamamoo',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '7',
-          name: 'Twice vs Redvelvet',
-          meron: 170,
-          wala: 230,
-          winner: 'Redvelvet',
-          total: 500000
-        }
-      ]
+      winner: ''
     }
   },
   methods: {
+    getMatchData () {
+      this.matchTable.loading = true
+      axiosCont.get('matches/getdata', {
+
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.matchTable.data = response.data
+        this.matchTable.loading = false
+      })
+    },
+    getCurrentMatch () {
+      this.matchTable.loading = true
+      axiosCont.get('matches/current', {
+
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.current_data = response.data
+        this.matchTable.loading = false
+        // window.location.reload()
+      })
+    },
+    nextMatch (winText) {
+      axiosCont.put('matches/next/' + this.current_data.id, {
+        winner: winText,
+        current_match_number: this.current_data.match_number
+      }).then(response => {
+        console.log('next')
+        console.log(response.data)
+        this.getCurrentMatch()
+        // window.location.reload()
+      })
+    },
+    editOdd () {
+      this.oddedit = false
+      axiosCont.put('matches/edit-odd/' + this.current_data.id, {
+        meron_odd: this.current_data.meron_odd,
+        wala_odd: this.current_data.wala_odd,
+        match_number: this.current_data.match_number
+      }).then(response => {
+        console.log('save')
+        console.log(response.data)
+        this.current_data = response.data
+      })
+    },
     displayWinner (text) {
       console.log(text)
       if (text === 'meron') {
@@ -231,18 +271,20 @@ export default {
         this.winner = 'WALA WINS'
         this.modal.bground = 'bg-blue'
       } else {
-        this.winner = 'DRAW'
+        this.winner = 'DRAW MATCH'
         this.modal.bground = 'bg-green'
       }
       this.winnerPop = true
+      this.nextMatch(this.winner.split(' ')[0])
       this.started = false
     },
     startmatch () {
       this.started = true
-    },
-    editOdd () {
-      this.oddedit = false
     }
+  },
+  mounted () {
+    this.getCurrentMatch()
+    this.getMatchData()
   }
 }
 </script>

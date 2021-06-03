@@ -9,7 +9,7 @@
             <q-separator dark inset />
 
             <q-card-section>
-                <div class="text-h1">24</div>
+                <div class="text-h1">{{ this.current_data.match_number }}</div>
             </q-card-section>
         </q-card>
     </div>
@@ -22,7 +22,7 @@
             <q-separator dark inset />
 
             <q-card-section>
-                <div class="text-h3">170</div>
+                <div class="text-h3">{{ this.current_data.meron_odd }}</div>
             </q-card-section>
         </q-card>
 
@@ -34,7 +34,7 @@
             <q-separator dark inset />
 
             <q-card-section>
-                <div class="text-h3">230</div>
+                <div class="text-h3">{{ this.current_data.wala_odd }}</div>
             </q-card-section>
         </q-card>
     </div>
@@ -84,118 +84,133 @@
 </template>
 
 <script>
+import { axiosCont } from 'boot/axios'
+
 export default {
   data () {
     return {
-      winnerPop: false,
+      isPwd: true,
+      matchTable: {
+        loading: false,
+        filter: null,
+        tableLoading: false
+      },
+      modal: {
+        bground: '',
+        confirmGenerate: false,
+        generate: false
+      },
+      numberOfmatches: 0,
+      password: '',
+      save: false,
+      current_data: [],
       columns: [
         {
-          name: 'Match Number',
+          name: 'match_number',
           required: true,
           label: 'Match Number',
           align: 'center',
-          field: 'id',
+          field: 'match_number',
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'name',
+          name: 'meron_odd',
           required: true,
-          label: 'Match',
+          label: 'Meron Odd',
           align: 'center',
-          field: row => row.name,
+          field: 'meron_odd',
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'meron',
+          name: 'wala_odd',
+          required: true,
+          label: 'Wala Odd',
           align: 'center',
-          label: 'Meron',
-          field: 'meron',
+          field: 'wala_odd',
+          format: val => `${val}`,
           sortable: true
         },
         {
-          name: 'wala',
+          name: 'meron_total',
+          required: true,
+          label: 'Meron Bets',
           align: 'center',
-          label: 'Wala',
-          field: 'wala',
+          field: 'meron_total',
+          format: val => `${val}`,
+          sortable: true
+        },
+        {
+          name: 'wala_total',
+          required: true,
+          label: 'Wala Bets',
+          align: 'center',
+          field: 'wala_total',
+          format: val => `${val}`,
           sortable: true
         },
         {
           name: 'winner',
-          align: 'center',
+          required: true,
           label: 'Winner',
-          field: 'winner',
-          sortable: true
-        },
-        {
-          name: 'total',
           align: 'center',
-          label: 'Total Bet',
-          field: 'total',
+          field: 'winner',
+          format: val => `${val}`,
           sortable: true
         }
       ],
 
-      data: [
-        {
-          id: '1',
-          name: 'Twice vs Momoland',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '2',
-          name: 'Twice vs Blackpink',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '3',
-          name: 'Twice vs Itzy',
-          meron: 170,
-          wala: 230,
-          winner: 'Draw',
-          total: 500000
-        },
-        {
-          id: '4',
-          name: 'Twice vs BTS',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '5',
-          name: 'Twice vs Izone',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '6',
-          name: 'Twice vs Mamamoo',
-          meron: 170,
-          wala: 230,
-          winner: 'Twice',
-          total: 500000
-        },
-        {
-          id: '7',
-          name: 'Twice vs Redvelvet',
-          meron: 170,
-          wala: 230,
-          winner: 'Redvelvet',
-          total: 500000
-        }
-      ]
+      matchData: []
     }
+  },
+  methods: {
+    getMatchData () {
+      this.matchTable.loading = true
+      axiosCont.get('matches/getdata', {
+
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.matchData = response.data
+        this.matchTable.loading = false
+      })
+    },
+
+    getCurrentMatch () {
+      this.matchTable.loading = true
+      axiosCont.get('matches/current', {
+
+      }).then(response => {
+        console.log('this respo')
+        console.log(response.data)
+        this.current_data = response.data
+        this.matchTable.loading = false
+      })
+    },
+    displayWinner (text) {
+      console.log(text)
+      if (text === 'meron') {
+        this.winner = 'MERON'
+        this.modal.bground = 'bg-red'
+      } else {
+        this.winner = 'WALA'
+        this.modal.bground = 'bg-blue'
+      }
+      this.winnerPop = true
+      this.started = false
+    },
+    startmatch () {
+      this.started = true
+    },
+    editOdd () {
+      this.oddedit = false
+    }
+  },
+  mounted () {
+    this.getMatchData()
+    this.getCurrentMatch()
+    // this.matchTable.loading = false
   }
 }
 </script>

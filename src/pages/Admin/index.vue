@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md q-gutter-md">
     <!-- <q-btn color="primary" label="Primary" @click="getUserData" /> -->
-    <q-btn class="row align-center" @click="modal.generate = true" color="green" text-color="white" label="Generate Matches" icon="add" align="right" />
+    <q-btn class="row align-center bg-green glossy text-white" @click="modal.generate = true" text-color="white" label="Generate Matches" icon="add" align="right" />
     <q-dialog v-model="modal.generate" persistent>
       <q-card dark class="q-pa-sm" style="min-width: 350px; width: 400px; background: rgba(0,0,0, 0.60)">
         <q-card-section>
@@ -26,7 +26,18 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input dark dense v-model="password" autofocus @keyup.enter="prompt = false" />
+          <q-input dark dense color="" v-model="password" :type="isPwd ? 'password' : 'text'">
+                <template v-slot:prepend>
+                  <q-icon name="vpn_key" />
+                </template>
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -40,14 +51,14 @@
     <div id="history">
       <q-table
           title="Matches"
-          :data="matchData"
-          :columns="columns"
+          :data="matchTable.data"
+          :columns="matchTable.columns"
           :filter="matchTable.filter"
           :loading="matchTable.loading"
           row-key="name"
       >
           <template v-slot:top>
-              <q-btn unelevated outline class="bg-green glossy text-white" @click="oddEdit = true" label="Register" icon="add" />
+              <q-btn unelevated outline class="bg-green glossy text-white" @click="oddEdit = true" label="Add Match" icon="add" />
               <q-space />
               <q-input borderless dense debounce="300" filled color="grey-7" placeholder="Search" v-model="matchTable.filter">
                   <template v-slot:append>
@@ -83,10 +94,68 @@ import { axiosCont } from 'boot/axios'
 export default {
   data () {
     return {
+      isPwd: true,
       matchTable: {
         loading: false,
         filter: null,
-        tableLoading: false
+        tableLoading: false,
+        data: [],
+        columns: [
+          {
+            name: 'match_number',
+            required: true,
+            label: 'Match Number',
+            align: 'center',
+            field: 'match_number',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'meron_odd',
+            required: true,
+            label: 'Meron Odd',
+            align: 'center',
+            field: 'meron_odd',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'wala_odd',
+            required: true,
+            label: 'Wala Odd',
+            align: 'center',
+            field: 'wala_odd',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'meron_total',
+            required: true,
+            label: 'Meron Bets',
+            align: 'center',
+            field: 'meron_total',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'wala_total',
+            required: true,
+            label: 'Wala Bets',
+            align: 'center',
+            field: 'wala_total',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'winner',
+            required: true,
+            label: 'Winner',
+            align: 'center',
+            field: 'winner',
+            format: val => `${val}`,
+            sortable: true
+          }
+        ]
       },
       modal: {
         bground: '',
@@ -99,75 +168,19 @@ export default {
       fullname: '',
       address: '',
       role: '',
-      winner: '',
-      columns: [
-        {
-          name: 'match_number',
-          required: true,
-          label: 'Match Number',
-          align: 'center',
-          field: 'match_number',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'meron_odd',
-          required: true,
-          label: 'Meron Odd',
-          align: 'center',
-          field: 'meron_odd',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'wala_odd',
-          required: true,
-          label: 'Wala Odd',
-          align: 'center',
-          field: 'wala_odd',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'meron_total',
-          required: true,
-          label: 'Meron Bets',
-          align: 'center',
-          field: 'meron_total',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'wala_total',
-          required: true,
-          label: 'Wala Bets',
-          align: 'center',
-          field: 'wala_total',
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'winner',
-          required: true,
-          label: 'Winner',
-          align: 'center',
-          field: 'winner',
-          format: val => `${val}`,
-          sortable: true
-        }
-      ],
-
-      matchData: []
+      winner: ''
     }
   },
   methods: {
     getMatchData () {
+      this.matchTable.loading = true
       axiosCont.get('matches/getdata', {
 
       }).then(response => {
         console.log('this respo')
         console.log(response.data)
-        this.matchData = response.data
+        this.matchTable.data = response.data
+        this.matchTable.loading = false
       })
     },
     generate () {
@@ -175,7 +188,6 @@ export default {
         number_of_matches: this.numberOfmatches,
         password: this.password
       }).then(response => {
-        this.matchTable.loading = true
         this.user_data = response.data
         this.getMatchData()
         this.matchTable.loading = false
@@ -202,6 +214,7 @@ export default {
   },
   mounted () {
     this.getMatchData()
+    // this.matchTable.loading = false
   }
 }
 </script>
