@@ -13,7 +13,7 @@
                     <div class="text-h3"> {{ current_data === null ? 'NO MATCHES' : current_data.meron_odd }} </div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" style="width: 98.5%;" color="red" push label="MERON" />
+            <q-btn size="xl" style="width: 98.5%;" color="red" @click="chooseSide('MERON')" push label="MERON" />
         </div>
 
         <div class="col q-gutter-sm" style="padding-left: 1px;">
@@ -28,41 +28,15 @@
                     <div class="text-h3"> {{ current_data === null ? 'NO MATCHES' : current_data.wala_odd }} </div>
                 </q-card-section>
             </q-card>
-            <q-btn size="xl" style="width: 98.5%" color="blue" push label="WALA" />
+            <q-btn size="xl" style="width: 98.5%" color="blue" push label="WALA"  @click="chooseSide('WALA')"/>
         </div>
     </div>
-     <!-- <div id="oddss" class="row">
-        <q-dialog v-model="oddedit" persistent class="">
-            <q-card>
-                <q-card-section class="row text- q-gutter-md">
-                  <div class="q-pa-md" style="max-width: 350px">
-                    <q-list  separator>
-                      <q-item >
-                        <q-item-label v-model="sultada">Sultada # 24</q-item-label>
-                      </q-item>
-                      <q-item >
-                          <q-item-label v-model="betside">Bet Side <b>WALA</b></q-item-label>
-                      </q-item>
-                    </q-list>
-                  </div>
-                </q-card-section>
-                  <q-card-section class="row">
-                  <q-input outlined v-model="nickname" label="Nickname" />
-                  <q-input outlined v-model="bet" label="Bet" />
-                </q-card-section>
 
-                <q-card-actions align="right">
-                <q-btn label="Save" color="green" v-close-popup />
-                <q-btn label="Cancel" color="primary" v-close-popup />
-                </q-card-actions>
-            </q-card>
-        </q-dialog>
-  </div> -->
    <q-card style="margin-left: auto; margin-right: auto; margin-top: 70px; max-width: 999px; width: 100%">
        <q-card-section class="row q-gutter-md">
         <div class="col-5 q-gutter-md">
           <!-- <q-input outlined v-model="nickname" label="Nickname" /> -->
-          <q-input outlined v-model="bet" label="Bet">
+          <q-input :disable="disabe_betting" outlined v-model="betamount" label="Bet">
             <template v-slot:before>
               <q-icon name="person"/>
             </template>
@@ -84,19 +58,19 @@
                 </div>
               </template>
             <q-item style="padding-top: 20px; margin-left: 6px">
-                <q-item-label v-model="betside">Bet Side <b class="text-red">WALA</b></q-item-label>
+                <q-item-label>Bet Side <b :class="bet_color">{{ betside }}</b></q-item-label>
             </q-item>
             <q-item style="padding-top: 20px; margin-left: 6px">
-              <q-item-label v-model="odds"> Odds:</q-item-label>
+              <q-item-label> Odds:</q-item-label>
             </q-item>
             <q-item style="padding-top: 20px; margin-left: 6px">
                 <q-item-label v-model="betamount">Bet Amount: <strong>{{ betamount }}</strong></q-item-label>
             </q-item>
               <q-item style="padding-top: 20px; margin-left: 6px">
-              <q-item-label v-model="betprize">Bet Prize</q-item-label>
+              <q-item-label>Bet Prize: {{ bet_prize }}</q-item-label>
             </q-item>
             <q-item style="padding-top: 20px; margin-left: 6px">
-                <q-item-label v-model="totalpayout">Total Payout:</q-item-label>
+                <q-item-label>Total Payout: {{ total_payout }}</q-item-label>
             </q-item>
               <q-card-actions align="left" style="padding-bottom: 25px; padding-top: 25px; margin-left: 10px">
                 <q-btn-group push>
@@ -168,7 +142,15 @@ export default {
       this.betprize = parseInt(this.betamount) * oddPercentage
       this.totalpayout = parseInt(this.betprize) + parseInt(this.betamount)
       this.disabe_betting = true
-      // console.log(this.betamount * oddPercentage)
+      console.log(this.betamount + ',' + oddPercentage)
+    }
+  },
+  computed: {
+    total_payout () {
+      return ((this.odds - 100) / 100) * parseInt(this.betamount) + parseInt(this.betamount)
+    },
+    bet_prize () {
+      return ((this.odds - 100) / 100) * parseInt(this.betamount)
     }
   },
   mounted () {
