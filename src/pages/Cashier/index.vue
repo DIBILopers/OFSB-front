@@ -1,5 +1,18 @@
 <template>
   <div class="q-pa-md q-gutter-lg">
+    <div id="match" class="row q-gutter-xs text-center">
+        <q-card dark bordered class="col text-black bg-white my-card">
+            <q-card-section>
+                <div class="text-h3">Match #</div>
+            </q-card-section>
+
+            <q-separator dark inset />
+
+            <q-card-section>
+                <div class="text-h1 text-red">{{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</div>
+            </q-card-section>
+        </q-card>
+    </div>
     <div id="oddss"  class="row q-gutter-xs text-center">
         <div class="col q-gutter-sm" style="padding-right: 1px">
             <q-card dark bordered class="bg-red-7 my-card">
