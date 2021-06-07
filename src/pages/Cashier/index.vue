@@ -1,6 +1,6 @@
 <template>
     <div class="q-pa-lg text-white">
-        <div class="row">
+        <div class="row q-col-gutter-lg">
             <div class="col-6 text-center">
               <q-card dark bordered class="col text-black bg-white my-card">
                 <q-card-section>
@@ -8,7 +8,7 @@
                 </q-card-section>
                 <q-separator inset />
                 <q-card-section class="q-pa-md text-h3">
-                    {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}
+                    <!-- {{ current_data === null ? 'NO MATCHES' : current_data.match_number }} --> 1
                 </q-card-section>
               </q-card>
 
@@ -33,31 +33,37 @@
                 </q-card>
             </div>
             <div class="col-6">
-            </div>
-
-          <div class="row q-gutter-sm">
-            <q-card class="col">
-              <q-card-section class="row text-right q-gutter-md">
-                <div class="col text-h1">
-                  100000
+              <div class="row q-col-gutter-md">
+                <div class="col-6">
+                  <q-btn size="lg" class="full-width"   style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)" push label="MERON"  @click="chooseSide('MERON')"/>
                 </div>
-              </q-card-section>
-              <q-separator dark color="grey-7" inset />
-              <q-card-section class="row q-gutter-md">
-                <q-btn class="col" outline color="black" label="100" />
-                <q-btn class="col" outline color="black" label="500" />
-                <q-btn class="col" outline color="black" label="1000" />
-              </q-card-section>
-              <q-card-section class="row q-gutter-md">
-                <q-btn class="col" outline color="black" label="2000" />
-                <q-btn class="col" outline color="black" label="3000" />
-                <q-btn class="col" outline color="black" label="4000" />
-              </q-card-section>
-              <q-card-section class="row q-gutter-md">
-                <q-btn class="col" outline color="black" label="5000" />
-              </q-card-section>
-            </q-card>
-            <q-card class="col">
+                <div class="col-6">
+                  <q-btn size="lg"  class="full-width" color="blue" push label="WALA"  @click="chooseSide('WALA')"/>
+                </div>
+              </div>
+              <div class="row q-gutter-sm">
+                <q-card class="col">
+                  <q-card-section class="row text-right q-gutter-md">
+                    <div class="col text-h1">
+                      100000
+                    </div>
+                  </q-card-section>
+                  <q-separator dark color="grey-7" inset />
+                  <q-card-section class="row q-gutter-md">
+                    <q-btn class="col" outline color="black" label="100" />
+                    <q-btn class="col" outline color="black" label="500" />
+                    <q-btn class="col" outline color="black" label="1000" />
+                  </q-card-section>
+                  <q-card-section class="row q-gutter-md">
+                    <q-btn class="col" outline color="black" label="2000" />
+                    <q-btn class="col" outline color="black" label="3000" />
+                    <q-btn class="col" outline color="black" label="4000" />
+                  </q-card-section>
+                  <q-card-section class="row q-gutter-md">
+                    <q-btn class="col" outline color="black" label="5000" />
+                  </q-card-section>
+                </q-card>
+                <q-card class="col">
             <q-card-section class="row q-gutter-md">
               <div class="q-pa-md col">
                 <q-list bordered separator>
@@ -98,6 +104,7 @@
                 </q-card>
               </div>
           </div>
+            </div>
   </div>
 </template>
 
