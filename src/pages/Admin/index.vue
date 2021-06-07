@@ -227,7 +227,7 @@ export default {
   },
   mounted () {
     this.getMatchData()
-    console.log(this.$store.state.reload.changed)
+    console.log('state: ' + this.$store.state.reload.changed)
     // this.matchTable.loading = false
   }
 }

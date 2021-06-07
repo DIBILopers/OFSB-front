@@ -140,22 +140,36 @@ export default {
       meron: 0,
       wala: 0,
       ended: 0,
+      changed: this.$store.state.reload.changed,
       current_data: []
     }
   },
+  watch: {
+    changed: function (isChanged) {
+      if (isChanged) {
+        console.log('state: ' + this.$store.state.reload.changed)
+        this.getCurrentMatch()
+      }
+    }
+  },
   methods: {
+    autoReload () {
+      // setInterval(() => {
+      this.getCurrentMatch()
+      // }, 5000)
+    },
     getCurrentMatch () {
-      this.loading = true
+      // this.loading = true
       axiosCont.get('matches/current', {
 
       }).then(response => {
-        console.log('this respo')
-        console.log(response.data)
+        // console.log('this respo')
+        // console.log(response.data)
         this.current_data = response.data
         this.meron = this.current_data === null ? 0 : this.current_data.meron_odd
         this.wala = this.current_data === null ? 0 : this.current_data.wala_odd
         this.ended = this.current_data === null
-        this.loading = false
+        // this.loading = false
         // window.location.reload()
       })
     },
@@ -213,7 +227,7 @@ export default {
     }
   },
   mounted () {
-    this.getCurrentMatch()
+    this.autoReload()
   }
 }
 </script>
