@@ -166,11 +166,6 @@ export default {
       return ((this.odds - 100) / 100) * parseInt(this.betamount)
     }
   },
-  computed: {
-    computedBet () {
-      return (parseInt(this.betamount) * (this.odds - 100) / 100) + parseInt(this.betamount)
-    }
-  },
   mounted () {
     this.getCurrentMatch()
   }
