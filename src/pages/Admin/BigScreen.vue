@@ -77,6 +77,7 @@ import { axiosCont } from 'boot/axios'
 export default {
   data () {
     return {
+      winnerPop: false,
       isPwd: true,
       matchTable: {
         loading: false,
