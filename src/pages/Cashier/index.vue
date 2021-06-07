@@ -33,6 +33,7 @@
                 </q-card>
             </div>
             <div class="col-6">
+<<<<<<< HEAD
 
 <<<<<<< HEAD
                 <q-card-section>
@@ -42,6 +43,9 @@
             <q-btn size="xl" style="width: 98.5%" color="blue" push label="WALA"  @click="chooseSide('WALA')"/>
         </div>
     </div>
+=======
+            </div>
+>>>>>>> 963fa31b987d8773a3fdd3352a395477c354206b
 
     <div class="row q-gutter-sm">
       <q-card class="col">
@@ -101,9 +105,12 @@
                 </q-btn-group>
               </q-card-actions>
           </q-list>
+<<<<<<< HEAD
 =======
             </div>
 >>>>>>> origin/bree
+=======
+>>>>>>> 963fa31b987d8773a3fdd3352a395477c354206b
         </div>
     </div>
   </div>
