@@ -1,111 +1,115 @@
 <template>
     <div class="q-pa-lg text-white">
-        <div class="row q-col-gutter-lg">
-            <div class="col-6 text-center">
-              <q-card dark bordered class="col text-black bg-white my-card">
+      <div class="row q-col-gutter-lg">
+          <div class="col-4 text-center">
+            <q-card dark bordered class="col text-black bg-white my-card">
+              <q-card-section>
+                  <div class="text-h4">Match #</div>
+              </q-card-section>
+              <q-separator inset />
+              <q-card-section class="q-pa-md text-h3">
+                  {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}
+              </q-card-section>
+            </q-card>
+
+              <q-card class="q-mt-md" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)">
                 <q-card-section>
-                    <div class="text-h4">Match #</div>
+                  <div class="text-h4">MERON</div>
                 </q-card-section>
-                <q-separator inset />
+                <q-separator dark inset />
                 <q-card-section class="q-pa-md text-h3">
-                    <!-- {{ current_data === null ? 'NO MATCHES' : current_data.match_number }} --> 1
+                  {{ current_data === null ? '0' : current_data.meron_odd }}
                 </q-card-section>
               </q-card>
 
-               <q-card class="q-mt-md" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)">
-                  <q-card-section>
-                    <div class="text-h4">MERON</div>
-                  </q-card-section>
-                  <q-separator dark inset />
-                  <q-card-section class="q-pa-md text-h3">
-                   120
-                  </q-card-section>
-                </q-card>
-
-               <q-card class="q-mt-md" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)">
-                  <q-card-section>
-                    <div class="text-h4">WALA</div>
-                  </q-card-section>
-                  <q-separator dark inset />
-                  <q-card-section class="q-pa-md text-h3">
-                   100
-                  </q-card-section>
-                </q-card>
-            </div>
-            <div class="col-6">
-              <div class="row q-col-gutter-md">
-                <div class="col-6">
-                  <q-btn size="lg" class="full-width"   style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)" push label="MERON"  @click="chooseSide('MERON')"/>
-                </div>
-                <div class="col-6">
-                  <q-btn size="lg"  class="full-width" color="blue" push label="WALA"  @click="chooseSide('WALA')"/>
-                </div>
-              </div>
-              <div class="row q-gutter-sm">
-                <q-card class="col">
-                  <q-card-section class="row text-right q-gutter-md">
-                    <div class="col text-h1">
-                      100000
-                    </div>
-                  </q-card-section>
-                  <q-separator dark color="grey-7" inset />
-                  <q-card-section class="row q-gutter-md">
-                    <q-btn class="col" outline color="black" label="100" />
-                    <q-btn class="col" outline color="black" label="500" />
-                    <q-btn class="col" outline color="black" label="1000" />
-                  </q-card-section>
-                  <q-card-section class="row q-gutter-md">
-                    <q-btn class="col" outline color="black" label="2000" />
-                    <q-btn class="col" outline color="black" label="3000" />
-                    <q-btn class="col" outline color="black" label="4000" />
-                  </q-card-section>
-                  <q-card-section class="row q-gutter-md">
-                    <q-btn class="col" outline color="black" label="5000" />
-                  </q-card-section>
-                </q-card>
-                <q-card class="col">
-            <q-card-section class="row q-gutter-md">
-              <div class="q-pa-md col">
-                <q-list bordered separator>
-                    <template>
-                      <div class="card">
-                        <div class="card-title bg-primary text-white">
-                          <q-item class="column">
-                            <q-item-label align="left" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # 24</q-item-label>
-                            <q-item-label align="left" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> May 20, 2021  1:03.00 PM </q-item-label>
-                          </q-item>
-                        </div>
-                      </div>
-                    </template>
-                  <q-item style="padding-top: 20px; margin-left: 6px">
-                      <q-item-label>Bet Side <b :class="bet_color">{{ betside }}</b></q-item-label>
-                  </q-item>
-                  <q-item style="padding-top: 20px; margin-left: 6px">
-                    <q-item-label> Odds: {{ odds }}</q-item-label>
-                  </q-item>
-                  <q-item style="padding-top: 20px; margin-left: 6px">
-                      <q-item-label v-model="betamount">Bet Amount: <strong>{{ betamount }}</strong></q-item-label>
-                  </q-item>
-                    <q-item style="padding-top: 20px; margin-left: 6px">
-                    <q-item-label>Bet Prize: {{ bet_prize }}</q-item-label>
-                  </q-item>
-                  <q-item >
-                      <q-item-label>Total Payout: <strong>{{ computedBet }}</strong></q-item-label>
-                  </q-item>
-                    <q-card-actions align="left" style="padding-bottom: 25px; padding-top: 25px; margin-left: 10px">
-                      <q-btn-group push>
-                        <q-btn color="green" glossy text-color="white" push label="Print" icon="print" style="padding-right: 5px"></q-btn>
-                        <q-btn color="primary" glossy text-color="white" push label="Back" style="padding-right: 10px; padding-left: 10px"></q-btn>
-                      </q-btn-group>
-                    </q-card-actions>
-                </q-list>
-              </div>
+              <q-card class="q-mt-md" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)">
+                <q-card-section>
+                  <div class="text-h4">WALA</div>
                 </q-card-section>
-                </q-card>
-              </div>
+                <q-separator dark inset />
+                <q-card-section class="q-pa-md text-h3">
+                  {{ current_data === null ? '0' : current_data.wala_odd }}
+                </q-card-section>
+              </q-card>
           </div>
+<!-- start of right section -->
+          <div class="col-8">
+            <div class="row q-mb-md q-col-gutter-md">
+              <div class="col-6">
+                <q-btn size="lg" class="full-width" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)" push label="MERON"  @click="chooseSide('MERON')"/>
+              </div>
+              <div class="col-6">
+                <q-btn size="lg"  class="full-width" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"  push label="WALA"   @click="chooseSide('WALA')"/>
+              </div>
             </div>
-  </div>
+            <div class="row q-gutter-sm">
+              <q-card class="col">
+                <q-card-section class="row text-right q-gutter-md">
+                  <div class="col text-black text-h4">
+                    {{ numberFormat(betamount) }}
+                  </div>
+                </q-card-section>
+                <q-separator dark color="grey-7" inset />
+                <q-card-section class="row q-gutter-md">
+                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="100" @click="amount('100')" />
+                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="500" @click="amount('500')" />
+                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="1,000" @click="amount('1000')" />
+                </q-card-section>
+                <q-card-section class="row q-gutter-md">
+                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="2,000" @click="amount('2000')" />
+                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="3,000" @click="amount('3000')" />
+                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="4,000" @click="amount('4000')" />
+                </q-card-section>
+                <q-card-section class="row q-gutter-md">
+                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
+                </q-card-section>
+                <q-card-section class="row q-gutter-md">
+                  <q-btn :disable="disabe_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" />
+                  <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
+                </q-card-section>
+              </q-card>
+              <q-card class="col text-black">
+                <q-card-section class="row q-gutter-md">
+                  <div class="col text-h6">
+                    <q-list bordered separator>
+                        <template>
+                          <div class="card">
+                            <div :class="bet_bg">
+                              <q-item class="column">
+                                <q-item-label align="left" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</q-item-label>
+                                <q-item-label align="left" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> May 20, 2021  1:03.00 PM </q-item-label>
+                              </q-item>
+                            </div>
+                          </div>
+                        </template>
+                      <q-item >
+                        <q-item-section>Bet Side: </q-item-section>
+                        <q-item-section side><span :class="bet_color">{{ betside }}</span></q-item-section>
+                      </q-item>
+                      <q-item >
+                        <q-item-section>Odds: </q-item-section>
+                        <q-item-section side>{{ odds }}</q-item-section>
+                      </q-item>
+                      <q-item >
+                        <q-item-section>Bet Amount: </q-item-section>
+                        <q-item-section side>{{ numberFormat(betamount) }}</q-item-section>
+                      </q-item>
+                      <q-item >
+                        <q-item-section>Bet Prize: </q-item-section>
+                        <q-item-section side>{{ numberFormat(bet_prize) }}</q-item-section>
+                      </q-item>
+                      <q-item >
+                        <q-item-section>Total Payout: </q-item-section>
+                        <q-item-section side>{{ numberFormat(computedBet) }}</q-item-section>
+                      </q-item>
+                    </q-list>
+                  </div>
+                </q-card-section>
+              </q-card>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -119,6 +123,7 @@ export default {
       },
       betside: '',
       bet_color: '',
+      bet_bg: '',
       loading: true,
       winnerPop: false,
       started: false,
@@ -154,9 +159,16 @@ export default {
         // window.location.reload()
       })
     },
+    numberFormat (text) {
+      return text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
+    amount (amount) {
+      this.betamount = amount !== 'Clear' ? parseInt(this.betamount) + parseInt(amount) : 0
+    },
     chooseSide (text) {
       this.betside = text
       this.bet_color = text === 'MERON' ? 'text-h6 text-red' : 'text-h6 text-blue'
+      this.bet_bg = text === 'MERON' ? 'text-h6 text-white bg-red-5' : 'text-h6 text-white bg-blue-9'
       this.odds = text === 'MERON' ? this.current_data.meron_odd : this.current_data.wala_odd
       this.disabe_betting = false
     },
