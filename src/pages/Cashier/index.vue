@@ -64,7 +64,7 @@
                   <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
                 </q-card-section>
                 <q-card-section class="row q-gutter-md">
-                  <q-btn :disable="disabe_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" />
+                  <q-btn :disable="disabe_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="add_bet(betside)" />
                   <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
                 </q-card-section>
               </q-card>
@@ -129,7 +129,7 @@ export default {
       started: false,
       oddedit: false,
       bet: 0,
-      sultada: '#23',
+      sultada: '',
       nickname: 'bords',
       betamount: 0,
       disabe_betting: true,
@@ -156,6 +156,30 @@ export default {
         this.wala = this.current_data === null ? 0 : this.current_data.wala_odd
         this.ended = this.current_data === null
         this.loading = false
+        // window.location.reload()
+      })
+    },
+    add_bet (bet) {
+      this.loading = true
+      axiosCont.put('matches/add-bet/' + this.current_data.id, {
+        bet_side: bet,
+        bet_amount: this.betamount
+      }).then(response => {
+        console.log('added')
+        this.betside = ''
+        this.bet_color = ''
+        this.bet_b = ''
+        this.bet = 0
+        this.betamount = 0
+        this.betprize = 0
+        this.odds = 0
+        this.totalpayout = 0
+        this.$q.loading.show({
+          delay: 400 // ms
+        })
+        // this.$q.loading.hide()
+        this.getCurrentMatch()
+        this.$q.loading.hide()
         // window.location.reload()
       })
     },
