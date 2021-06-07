@@ -159,7 +159,7 @@ export default {
     }
   },
   computed: {
-    total_payout () {
+    computedBet () {
       return ((this.odds - 100) / 100) * parseInt(this.betamount) + parseInt(this.betamount)
     },
     bet_prize () {
