@@ -45,19 +45,30 @@
         </div>
     </div>
 
-   <q-card style="margin-left: auto; margin-right: auto; margin-top: 70px; max-width: 999px; width: 100%">
+    <div class="row q-gutter-sm">
+      <q-card class="col">
+        <q-card-section class="row text-right q-gutter-md">
+          <div class="col text-h1">
+            100000
+          </div>
+        </q-card-section>
+        <q-separator dark color="grey-7" inset />
+        <q-card-section class="row q-gutter-md">
+          <q-btn class="col" outline color="black" label="100" />
+          <q-btn class="col" outline color="black" label="500" />
+          <q-btn class="col" outline color="black" label="1000" />
+        </q-card-section>
+        <q-card-section class="row q-gutter-md">
+          <q-btn class="col" outline color="black" label="2000" />
+          <q-btn class="col" outline color="black" label="3000" />
+          <q-btn class="col" outline color="black" label="4000" />
+        </q-card-section>
+        <q-card-section class="row q-gutter-md">
+          <q-btn class="col" outline color="black" label="5000" />
+        </q-card-section>
+      </q-card>
+      <q-card class="col">
        <q-card-section class="row q-gutter-md">
-        <div class="col-5 q-gutter-md">
-          <!-- <q-input outlined v-model="nickname" label="Nickname" /> -->
-          <q-input :disable="disabe_betting" outlined v-model="betamount" label="Bet">
-            <template v-slot:before>
-              <q-icon name="person"/>
-            </template>
-          </q-input>
-            <q-card-actions align="right">
-             <q-btn :disable="disabe_betting" class="full-width" icon="monetization_on" @click="createBet" label="Bet" color="green" v-close-popup />
-           </q-card-actions>
-        </div>
         <div class="q-pa-md col">
           <q-list bordered separator>
               <template>
@@ -96,6 +107,7 @@
           </q-card-section>
       </q-card>
     </div>
+  </div>
 </template>
 
 <script>
