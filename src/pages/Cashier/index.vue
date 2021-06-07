@@ -33,10 +33,69 @@
                 </q-card>
             </div>
             <div class="col-6">
-
             </div>
+
+    <div class="row q-gutter-sm">
+      <q-card class="col">
+        <q-card-section class="row text-right q-gutter-md">
+          <div class="col text-h1">
+            100000
+          </div>
+        </q-card-section>
+        <q-separator dark color="grey-7" inset />
+        <q-card-section class="row q-gutter-md">
+          <q-btn class="col" outline color="black" label="100" />
+          <q-btn class="col" outline color="black" label="500" />
+          <q-btn class="col" outline color="black" label="1000" />
+        </q-card-section>
+        <q-card-section class="row q-gutter-md">
+          <q-btn class="col" outline color="black" label="2000" />
+          <q-btn class="col" outline color="black" label="3000" />
+          <q-btn class="col" outline color="black" label="4000" />
+        </q-card-section>
+        <q-card-section class="row q-gutter-md">
+          <q-btn class="col" outline color="black" label="5000" />
+        </q-card-section>
+      </q-card>
+      <q-card class="col">
+       <q-card-section class="row q-gutter-md">
+        <div class="q-pa-md col">
+          <q-list bordered separator>
+              <template>
+                <div class="card">
+                  <div class="card-title bg-primary text-white">
+                    <q-item class="column">
+                      <q-item-label align="left" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # 24</q-item-label>
+                      <q-item-label align="left" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> May 20, 2021  1:03.00 PM </q-item-label>
+                    </q-item>
+                  </div>
+                </div>
+              </template>
+            <q-item style="padding-top: 20px; margin-left: 6px">
+                <q-item-label>Bet Side <b :class="bet_color">{{ betside }}</b></q-item-label>
+            </q-item>
+            <q-item style="padding-top: 20px; margin-left: 6px">
+              <q-item-label> Odds: {{ odds }}</q-item-label>
+            </q-item>
+            <q-item style="padding-top: 20px; margin-left: 6px">
+                <q-item-label v-model="betamount">Bet Amount: <strong>{{ betamount }}</strong></q-item-label>
+            </q-item>
+              <q-item style="padding-top: 20px; margin-left: 6px">
+              <q-item-label>Bet Prize: {{ bet_prize }}</q-item-label>
+            </q-item>
+            <q-item >
+                <q-item-label>Total Payout: <strong>{{ computedBet }}</strong></q-item-label>
+            </q-item>
+              <q-card-actions align="left" style="padding-bottom: 25px; padding-top: 25px; margin-left: 10px">
+                <q-btn-group push>
+                  <q-btn color="green" glossy text-color="white" push label="Print" icon="print" style="padding-right: 5px"></q-btn>
+                  <q-btn color="primary" glossy text-color="white" push label="Back" style="padding-right: 10px; padding-left: 10px"></q-btn>
+                </q-btn-group>
+              </q-card-actions>
+          </q-list>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
