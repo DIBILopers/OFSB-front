@@ -74,7 +74,7 @@
                 <q-item-label>Bet Side <b :class="bet_color">{{ betside }}</b></q-item-label>
             </q-item>
             <q-item style="padding-top: 20px; margin-left: 6px">
-              <q-item-label> Odds:</q-item-label>
+              <q-item-label> Odds: {{ odds }}</q-item-label>
             </q-item>
             <q-item style="padding-top: 20px; margin-left: 6px">
                 <q-item-label v-model="betamount">Bet Amount: <strong>{{ betamount }}</strong></q-item-label>
