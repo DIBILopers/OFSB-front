@@ -266,6 +266,8 @@ export default {
         console.log('save')
         console.log(response.data)
         this.current_data = response.data
+        this.$store.commit('reload/changeState', true)
+        console.log('state: ' + this.$store.state.reload.changed)
         this.getCurrentMatch()
       })
     },
