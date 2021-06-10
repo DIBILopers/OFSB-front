@@ -4,7 +4,7 @@
       <div id="match" class="row q-gutter-xs text-center">
         <q-card dark bordered class="col text-black bg-white my-card">
             <q-card-section>
-                <div class="text-h3">Match #</div>
+                <div class="text-h3">Match #{{ this.$q.localStorage.getItem('meron') }} {{ this.$q.localStorage.getItem('wala') }}</div>
             </q-card-section>
 
             <q-separator dark inset />
@@ -99,18 +99,6 @@ export default {
     }
   },
   methods: {
-    getMatchData () {
-      this.matchTable.loading = true
-      axiosCont.get('matches/getdata', {
-
-      }).then(response => {
-        console.log('this respo')
-        console.log(response.data)
-        this.matchData = response.data
-        this.matchTable.loading = false
-      })
-    },
-
     getCurrentMatch () {
       this.matchTable.loading = true
       axiosCont.get('matches/current', {
@@ -153,9 +141,12 @@ export default {
     }
   },
   mounted () {
-    this.getMatchData()
-    this.getCurrentMatch()
-    this.getRecentMatch()
+    // this.getCurrentMatch()
+    // this.getRecentMatch()
+    // setInterval(() => {
+    //   this.getCurrentMatch()
+    //   this.getRecentMatch()
+    // }, 1000)
     // this.matchTable.loading = false
   }
 }

@@ -163,7 +163,6 @@ export default {
     getCurrentMatch () {
       // this.loading = true
       axiosCont.get('matches/current', {
-
       }).then(response => {
         // console.log('this respo')
         // console.log(response.data)
@@ -190,9 +189,6 @@ export default {
         this.betprize = 0
         this.odds = 0
         this.totalpayout = 0
-        this.$q.loading.show({
-          delay: 400 // ms
-        })
         // this.$q.loading.hide()
         this.getCurrentMatch()
         this.$q.loading.hide()
@@ -236,6 +232,9 @@ export default {
   },
   mounted () {
     this.getCurrentMatch()
+    setInterval(() => {
+      this.getCurrentMatch()
+    }, 10000)
     const date = new Date()
     this.current_date = date.toLocaleDateString('en-US', this.dateOptions)
     setInterval(() => {
