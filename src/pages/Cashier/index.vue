@@ -63,8 +63,8 @@
                 <q-card-section class="row q-gutter-md">
                   <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
                 </q-card-section>
-                <q-card-section class="row q-gutter-md">
-                  <q-btn :disable="disabe_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" />
+                <q-card-section class="row q-mt-lg q-gutter-md">
+                  <q-btn :disable="disabe_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="add_bet(betside)" />
                   <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
                 </q-card-section>
               </q-card>
@@ -76,8 +76,8 @@
                           <div class="card">
                             <div :class="bet_bg">
                               <q-item class="column">
-                                <q-item-label align="left" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</q-item-label>
-                                <q-item-label align="left" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> May 20, 2021  1:03.00 PM </q-item-label>
+                                <q-item-label align="center" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</q-item-label>
+                                <q-item-label align="center" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> {{ current_date }} {{ current_time }} </q-item-label>
                               </q-item>
                             </div>
                           </div>
@@ -129,7 +129,7 @@ export default {
       started: false,
       oddedit: false,
       bet: 0,
-      sultada: '#23',
+      sultada: '',
       nickname: 'bords',
       betamount: 0,
       disabe_betting: true,
@@ -140,22 +140,58 @@ export default {
       meron: 0,
       wala: 0,
       ended: 0,
-      current_data: []
+      current_data: [],
+      current_time: '',
+      dateOptions: { year: 'numeric', month: 'long', day: 'numeric' },
+      current_date: ''
+    }
+  },
+  watch: {
+    changed: function (isChanged) {
+      if (isChanged) {
+        console.log('state: ' + this.$store.state.reload.changed)
+        this.getCurrentMatch()
+      }
     }
   },
   methods: {
+    autoReload () {
+      // setInterval(() => {
+      this.getCurrentMatch()
+      // }, 5000)
+    },
     getCurrentMatch () {
-      this.loading = true
+      // this.loading = true
       axiosCont.get('matches/current', {
-
       }).then(response => {
-        console.log('this respo')
-        console.log(response.data)
+        // console.log('this respo')
+        // console.log(response.data)
         this.current_data = response.data
         this.meron = this.current_data === null ? 0 : this.current_data.meron_odd
         this.wala = this.current_data === null ? 0 : this.current_data.wala_odd
         this.ended = this.current_data === null
-        this.loading = false
+        // this.loading = false
+        // window.location.reload()
+      })
+    },
+    add_bet (bet) {
+      this.loading = true
+      axiosCont.put('matches/add-bet/' + this.current_data.id, {
+        bet_side: bet,
+        bet_amount: this.betamount
+      }).then(response => {
+        console.log('added')
+        this.betside = ''
+        this.bet_color = ''
+        this.bet_b = ''
+        this.bet = 0
+        this.betamount = 0
+        this.betprize = 0
+        this.odds = 0
+        this.totalpayout = 0
+        // this.$q.loading.hide()
+        this.getCurrentMatch()
+        this.$q.loading.hide()
         // window.location.reload()
       })
     },
@@ -178,6 +214,12 @@ export default {
       this.totalpayout = parseInt(this.betprize) + parseInt(this.betamount)
       this.disabe_betting = true
       console.log(this.betamount + ',' + oddPercentage)
+    },
+    display_ct () {
+      setInterval(() => {
+        const display = new Date().toLocaleTimeString()
+        this.current_time = display
+      }, 1000)
     }
   },
   computed: {
@@ -190,6 +232,15 @@ export default {
   },
   mounted () {
     this.getCurrentMatch()
+    setInterval(() => {
+      this.getCurrentMatch()
+    }, 10000)
+    const date = new Date()
+    this.current_date = date.toLocaleDateString('en-US', this.dateOptions)
+    setInterval(() => {
+      const display = new Date().toLocaleTimeString()
+      this.current_time = display
+    }, 1000)
   }
 }
 </script>

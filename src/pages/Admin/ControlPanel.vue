@@ -3,7 +3,7 @@
     <div id="match" class="row q-gutter-xs text-center">
         <q-card dark bordered class="col text-black bg-white my-card">
             <q-card-section>
-                <div class="text-h3">Match #</div>
+                <div class="text-h3">Match # {{ this.$store.state.reload.changed }}</div>
             </q-card-section>
 
             <q-separator dark inset />
@@ -213,7 +213,8 @@ export default {
       oddedit: false,
       meron: 100,
       wala: 100,
-      winner: ''
+      winner: '',
+      web_connection: null
     }
   },
   methods: {
@@ -223,7 +224,7 @@ export default {
 
       }).then(response => {
         console.log('this respo')
-        console.log(response.data)
+        console.log((response.data).reverse())
         this.matchTable.data = response.data
         this.matchTable.loading = false
       })
@@ -266,6 +267,11 @@ export default {
         console.log('save')
         console.log(response.data)
         this.current_data = response.data
+        this.$store.commit('reload/changeState', true)
+        this.$q.localStorage.set('meron', this.meron)
+        this.$q.localStorage.set('wala', this.wala)
+        this.$store.commit('reload/changeOdds', { meron: this.meron, wala: this.wala })
+        console.log('state: ' + this.$store.state.reload.changed)
         this.getCurrentMatch()
       })
     },
