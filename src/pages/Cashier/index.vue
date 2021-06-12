@@ -64,7 +64,7 @@
                 <div class="card">
                   <div class="card-title bg-primary text-white">
                     <q-item class="column">
-                      <q-item-label align="left" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # 24</q-item-label>
+                      <q-item-label align="left" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</q-item-label>
                       <q-item-label align="left" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> May 20, 2021  1:03.00 PM </q-item-label>
                     </q-item>
                   </div>
@@ -104,6 +104,18 @@ import { axiosCont } from 'boot/axios'
 export default {
   data () {
     return {
+      date: {
+        str: '',
+        month: '',
+        day: '',
+        year: ''
+      },
+      time: {
+        str: '',
+        hour: '',
+        min: '',
+        sec: ''
+      },
       modal: {
         bground: ''
       },
@@ -156,6 +168,12 @@ export default {
       this.totalpayout = parseInt(this.betprize) + parseInt(this.betamount)
       this.disabe_betting = true
       console.log(this.betamount + ',' + oddPercentage)
+    },
+    getDates () {
+      const date = new Date()
+      const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      console.log('month = ' + (month[date.getMonth()]))
+      console.log('hours = ' + date.getHours())
     }
   },
   computed: {
@@ -167,6 +185,7 @@ export default {
     }
   },
   mounted () {
+    this.getDates()
     this.getCurrentMatch()
   }
 }
