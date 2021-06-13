@@ -4,7 +4,8 @@ const routes = [
     path: '/',
     component: () => import('src/layouts/blank.vue'),
     children: [
-      { path: '', component: () => import('pages/Login/Index.vue') }
+      { path: '', component: () => import('pages/Login/Index.vue') },
+      { path: 'big-screen', component: () => import('pages/Admin/BigScreen.vue') }
     ]
   },
 
@@ -14,7 +15,6 @@ const routes = [
     children: [
       { path: 'home', component: () => import('pages/Admin/Index.vue') },
       { path: 'control-panel', component: () => import('pages/Admin/ControlPanel.vue') },
-      { path: 'big-screen', component: () => import('pages/Admin/BigScreen.vue') },
       { path: 'settings', component: () => import('pages/Admin/Setting.vue') }
     ]
   },

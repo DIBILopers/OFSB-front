@@ -1,27 +1,28 @@
 <template>
-  <div class="q-pa-md">
-    <q-layout view="hHh Lpr lff">
-      <q-header elevated class="bg-blue-9">
+  <div class="bg-white">
+    <q-layout view="hHh Lpr lFf">
+      <q-header elevated style="background: #24292e;">
         <q-toolbar>
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
-          <q-toolbar-title>Talpakan na</q-toolbar-title>
+          <q-toolbar-title class="text-amber-6 text-subtitle">
+            <q-avatar> <img src="~assets/roaster-logo.png"> </q-avatar>
+            Sabongan</q-toolbar-title>
         </q-toolbar>
       </q-header>
 
       <q-drawer
-        style="font-size:15pt"
+        style="font-size: 15pt;"
         v-model="drawer"
         show-if-above
-        :width="300"
+        :width="280"
         :breakpoint="500"
         bordered
-        content-class="bg-grey-3"
+        content-class="bg-grey-10 text-white"
       >
         <q-scroll-area class="fit">
           <q-list>
-
             <template v-for="(menuItem, index) in menuList">
-              <q-item :key="index" clickable :to="menuItem.route" active-class="bg-blue text-white" :active="menuItem.label === 'History'" v-ripple @click="minify(menuItem.route)">
+              <q-item :key="index" clickable :to="menuItem.route" active-class="bg-primary  text-white" :active="menuItem.label === 'History'" v-ripple @click="minify(menuItem.route)">
                 <q-item-section avatar>
                   <q-icon :name="menuItem.icon" />
                 </q-item-section>
@@ -39,6 +40,15 @@
       <q-page-container>
         <router-view />
       </q-page-container>
+
+      <q-footer class="row" style="background: rgba(250, 250, 250, 0.2)">
+        <div class="text-right q-pa-lg col-12">
+          <img height="20px" src="~assets/codeblood/small.png">
+            &nbsp;
+          <img height="20px" src="~assets/codeblood/small-text.png">
+        </div>
+        <div class="col"></div>
+      </q-footer>
     </q-layout>
   </div>
 </template>
@@ -61,12 +71,13 @@ const menuList = [
     icon: 'tv',
     label: 'Big Screen',
     separator: false,
-    route: '/admin/big-screen'
+    route: '/big-screen'
   },
   {
     icon: 'settings',
     label: 'Settings',
-    separator: false
+    separator: false,
+    route: '/admin/settings'
   }
 ]
 
