@@ -33,41 +33,101 @@
               </q-card>
           </div>
 <!-- start of right section -->
-          <div class="col-8">
-            <div class="row q-mb-md q-col-gutter-md">
-              <div class="col-6">
-                <q-btn size="lg" class="full-width" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)" push label="MERON"  @click="chooseSide('MERON')"/>
-              </div>
-              <div class="col-6">
-                <q-btn size="lg"  class="full-width" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"  push label="WALA"   @click="chooseSide('WALA')"/>
-              </div>
+        <div class="col-8">
+          <div class="row q-mb-md q-col-gutter-md">
+            <div class="col-6">
+              <q-btn size="lg" class="full-width" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)" push label="MERON"  @click="chooseSide('MERON')"/>
             </div>
-            <div class="row q-gutter-sm">
-              <q-card class="col">
-                <q-card-section class="row text-right q-gutter-md">
-                  <div class="col text-black text-h4">
-                    {{ numberFormat(betamount) }}
-                  </div>
-                </q-card-section>
-                <q-separator dark color="grey-7" inset />
-                <q-card-section class="row q-gutter-md">
-                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="100" @click="amount('100')" />
-                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="500" @click="amount('500')" />
-                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="1,000" @click="amount('1000')" />
-                </q-card-section>
-                <q-card-section class="row q-gutter-md">
-                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="2,000" @click="amount('2000')" />
-                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="3,000" @click="amount('3000')" />
-                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="4,000" @click="amount('4000')" />
-                </q-card-section>
-                <q-card-section class="row q-gutter-md">
-                  <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
-                </q-card-section>
-                <q-card-section class="row q-mt-lg q-gutter-md">
-                  <q-btn :disable="disabe_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="add_bet(betside)" />
-                  <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
-                </q-card-section>
-              </q-card>
+            <div class="col-6">
+              <q-btn size="lg"  class="full-width" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"  push label="WALA"   @click="chooseSide('WALA')"/>
+            </div>
+          </div>
+          <div class="row q-gutter-sm">
+            <q-card class="col">
+              <q-card-section class="row text-right q-gutter-md">
+                <div class="col text-black text-h4">
+                  {{ numberFormat(betamount) }}
+                </div>
+              </q-card-section>
+              <q-separator dark color="grey-7" inset />
+              <q-card-section class="row q-gutter-md">
+                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="100" @click="amount('100')" />
+                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="500" @click="amount('500')" />
+                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="1,000" @click="amount('1000')" />
+              </q-card-section>
+              <q-card-section class="row q-gutter-md">
+                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="2,000" @click="amount('2000')" />
+                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="3,000" @click="amount('3000')" />
+                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="4,000" @click="amount('4000')" />
+              </q-card-section>
+              <q-card-section class="row q-gutter-md">
+                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
+              </q-card-section>
+              <q-card-section class="row q-mt-lg q-gutter-md">
+                <q-btn color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="generateReport" />
+                <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
+              </q-card-section>
+            </q-card>
+            <q-card class="col text-black">
+              <q-card-section class="row q-gutter-md">
+                <div class="col text-h6">
+                  <q-list bordered separator>
+                      <template>
+                        <div class="card">
+                          <div :class="bet_bg">
+                            <q-item class="column">
+                              <q-item-label align="center" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</q-item-label>
+                              <q-item-label align="center" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> {{ current_date }} {{ current_time }} </q-item-label>
+                            </q-item>
+                          </div>
+                        </div>
+                      </template>
+                    <q-item >
+                      <q-item-section>Bet Side: </q-item-section>
+                      <q-item-section side><span :class="bet_color">{{ betside }}</span></q-item-section>
+                    </q-item>
+                    <q-item >
+                      <q-item-section>Odds: </q-item-section>
+                      <q-item-section side>{{ odds }}</q-item-section>
+                    </q-item>
+                    <q-item >
+                      <q-item-section>Bet Amount: </q-item-section>
+                      <q-item-section side>{{ numberFormat(betamount) }}</q-item-section>
+                    </q-item>
+                    <q-item >
+                      <q-item-section>Bet Prize: </q-item-section>
+                      <q-item-section side>{{ numberFormat(bet_prize) }}</q-item-section>
+                    </q-item>
+                    <q-item >
+                      <q-item-section>Total Payout: </q-item-section>
+                      <q-item-section side>{{ numberFormat(computedBet) }}</q-item-section>
+                    </q-item>
+                  </q-list>
+                </div>
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
+      </div>
+      <div>
+        <vue-html2pdf
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="false"
+          :preview-modal="true"
+          :paginate-elements-by-height="1400"
+          filename="hee hee"
+          :pdf-quality="2"
+          :manual-pagination="false"
+          pdf-format=""
+          pdf-orientation="portrait"
+          pdf-content-width="160pt"
+          @progress="onProgress($event)"
+          @hasStartedGeneration="hasStartedGeneration()"
+          @hasGenerated="hasGenerated($event)"
+          ref="html2Pdf"
+          >
+            <section slot="pdf-content">
               <q-card class="col text-black">
                 <q-card-section class="row q-gutter-md">
                   <div class="col text-h6">
@@ -106,14 +166,19 @@
                   </div>
                 </q-card-section>
               </q-card>
-          </div>
-        </div>
+            </section>
+            <!-- <q-card-section class="row q-mt-lg q-gutter-md">
+              <q-btn color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="generateReport" />
+              <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
+            </q-card-section> -->
+        </vue-html2pdf>
       </div>
     </div>
 </template>
 
 <script>
 import { axiosCont } from 'boot/axios'
+import VueHtml2pdf from 'vue-html2pdf'
 
 export default {
   data () {
@@ -154,7 +219,13 @@ export default {
       }
     }
   },
+  components: {
+    VueHtml2pdf
+  },
   methods: {
+    generateReport () {
+      this.$refs.html2Pdf.generatePdf()
+    },
     autoReload () {
       // setInterval(() => {
       this.getCurrentMatch()
@@ -231,16 +302,16 @@ export default {
     }
   },
   mounted () {
-    this.getCurrentMatch()
-    setInterval(() => {
-      this.getCurrentMatch()
-    }, 10000)
-    const date = new Date()
-    this.current_date = date.toLocaleDateString('en-US', this.dateOptions)
-    setInterval(() => {
-      const display = new Date().toLocaleTimeString()
-      this.current_time = display
-    }, 1000)
+    // this.getCurrentMatch()
+    // setInterval(() => {
+    //   this.getCurrentMatch()
+    // }, 10000)
+    // const date = new Date()
+    // this.current_date = date.toLocaleDateString('en-US', this.dateOptions)
+    // setInterval(() => {
+    //   const display = new Date().toLocaleTimeString()
+    //   this.current_time = display
+    // }, 1000)
   }
 }
 </script>

@@ -58,13 +58,13 @@
     </div>
 
     <div id="winnerPop" class="row justify-center q-gutter-xs">
-        <q-dialog  v-model="winnerPop">
-            <q-card style="width:500px;" :class="modal.bground">
-                <q-card-section class="text-white row">
-                  <div class="text-h1 text-center">{{ winner }}</div>
-                </q-card-section>
-            </q-card>
-        </q-dialog>
+      <q-dialog  v-model="winnerPop">
+        <q-card style="width:500px;" :class="modal.bground">
+            <q-card-section class="text-white row">
+              <div class="text-h1 text-center">{{ winner }}</div>
+            </q-card-section>
+        </q-card>
+      </q-dialog>
     </div>
 
     <div id="control" class="row q-gutter-xs text-center">
