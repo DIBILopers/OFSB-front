@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white q-pa-md">
-    <q-layout view="hHh Lpr fFf">
+  <div class="bg-white">
+    <q-layout view="hHh Lpr lFf">
       <q-header elevated style="background: #24292e;">
         <q-toolbar>
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
@@ -42,7 +42,7 @@
       </q-page-container>
 
       <q-footer class="row" style="background: rgba(250, 250, 250, 0.2)">
-        <div class="q-py-md text-center col-2" style="width: 250px">
+        <div class="text-right q-pa-lg col-12">
           <img height="20px" src="~assets/codeblood/small.png">
             &nbsp;
           <img height="20px" src="~assets/codeblood/small-text.png">

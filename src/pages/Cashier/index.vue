@@ -64,7 +64,7 @@
                 <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
               </q-card-section>
               <q-card-section class="row q-mt-lg q-gutter-md">
-                <q-btn color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="generateReport" />
+                <q-btn color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="add_bet(betside)" />
                 <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
               </q-card-section>
             </q-card>
@@ -110,68 +110,87 @@
         </div>
       </div>
       <div>
+        <!-- start print -->
         <vue-html2pdf
           :show-layout="false"
           :float-layout="true"
           :enable-download="false"
           :preview-modal="true"
-          :paginate-elements-by-height="1400"
-          filename="hee hee"
+          :paginate-elements-by-height="300"
+          filename="receipt"
           :pdf-quality="2"
           :manual-pagination="false"
-          pdf-format=""
+          pdf-format="a7"
           pdf-orientation="portrait"
-          pdf-content-width="160pt"
+          pdf-content-width="212px"
           @progress="onProgress($event)"
           @hasStartedGeneration="hasStartedGeneration()"
           @hasGenerated="hasGenerated($event)"
           ref="html2Pdf"
           >
             <section slot="pdf-content">
-              <q-card class="col text-black">
-                <q-card-section class="row q-gutter-md">
-                  <div class="col text-h6">
-                    <q-list bordered separator>
-                        <template>
-                          <div class="card">
-                            <div :class="bet_bg">
-                              <q-item class="column">
-                                <q-item-label align="center" v-model="sultada" class="text-h6" style="margin-top: 10px">Sultada # {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}</q-item-label>
-                                <q-item-label align="center" v-model="sultada" class="text-subtitle2" style="margin-bottom: 10px"> {{ current_date }} {{ current_time }} </q-item-label>
-                              </q-item>
-                            </div>
-                          </div>
-                        </template>
-                      <q-item >
-                        <q-item-section>Bet Side: </q-item-section>
-                        <q-item-section side><span :class="bet_color">{{ betside }}</span></q-item-section>
-                      </q-item>
-                      <q-item >
-                        <q-item-section>Odds: </q-item-section>
-                        <q-item-section side>{{ odds }}</q-item-section>
-                      </q-item>
-                      <q-item >
-                        <q-item-section>Bet Amount: </q-item-section>
-                        <q-item-section side>{{ numberFormat(betamount) }}</q-item-section>
-                      </q-item>
-                      <q-item >
-                        <q-item-section>Bet Prize: </q-item-section>
-                        <q-item-section side>{{ numberFormat(bet_prize) }}</q-item-section>
-                      </q-item>
-                      <q-item >
-                        <q-item-section>Total Payout: </q-item-section>
-                        <q-item-section side>{{ numberFormat(computedBet) }}</q-item-section>
-                      </q-item>
-                    </q-list>
-                  </div>
-                </q-card-section>
-              </q-card>
+              <div class="row q-pr-lg q-py-md q-pl-md">
+                <div class="text-bold text-h6 col-12 text-center">
+                      {{ betside }}
+                </div>
+                <div class="col-12 text-center">
+                      {{ current_date }} {{ current_time }}
+                </div>
+                <div class="q-pt-sm col-6 text-left">
+                      Sultada #
+                </div>
+                <div class="col-6 text-right">
+                  {{ current_data === null ? 'NO MATCHES' : current_data.match_number }}
+                </div>
+                <div class="col-6 text-left">
+                      Bet Side
+                </div>
+                <div class="col-6 text-right">
+                  {{ betside }}
+                </div>
+                <div class="col-6 text-left">
+                      Odds
+                </div>
+                <div class="col-6 text-right">
+                  {{ odds }}
+                </div>
+                <div class="col-6 text-left">
+                      Bet Amount
+                </div>
+                <div class="col-6 text-right">
+                  {{ numberFormat(betamount) }}
+                </div>
+                <div class="col-6 text-left">
+                      Bet Prize
+                </div>
+                <div class="col-6 text-right">
+                  {{ numberFormat(bet_prize) }}
+                </div>
+                <div class="col-6 text-left text-bold">
+                      Total Payout
+                </div>
+                <div class="col-6 text-right text-bold">
+                  {{ numberFormat(computedBet) }}
+                </div>
+                <div class="col-12">
+                  <q-separator color="black" />
+                </div>
+                <div class="col-6 text-left">
+                    Cashier
+                </div>
+                <div class="col-6 text-right">
+                    PC3
+                </div>
+                <div class="col-12 font-style">
+                  1. Ang ticket na ito ay para sa Sultada No na naka sulat sa taas.
+                </div>
+                <div class="col-12 font-style">
+                  2. Ang premyo ng ticket na ito ay dapat i-claim ang ticker sa loob ng 72 oras
+                </div>
+              </div>
             </section>
-            <!-- <q-card-section class="row q-mt-lg q-gutter-md">
-              <q-btn color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="generateReport" />
-              <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
-            </q-card-section> -->
         </vue-html2pdf>
+        <!-- end print -->
       </div>
     </div>
 </template>
@@ -251,6 +270,7 @@ export default {
         bet_side: bet,
         bet_amount: this.betamount
       }).then(response => {
+        this.generateReport()
         console.log('added')
         this.betside = ''
         this.bet_color = ''
@@ -302,16 +322,22 @@ export default {
     }
   },
   mounted () {
-    // this.getCurrentMatch()
-    // setInterval(() => {
-    //   this.getCurrentMatch()
-    // }, 10000)
-    // const date = new Date()
-    // this.current_date = date.toLocaleDateString('en-US', this.dateOptions)
-    // setInterval(() => {
-    //   const display = new Date().toLocaleTimeString()
-    //   this.current_time = display
-    // }, 1000)
+    this.getCurrentMatch()
+    setInterval(() => {
+      this.getCurrentMatch()
+    }, 10000)
+    const date = new Date()
+    this.current_date = date.toLocaleDateString('en-US', this.dateOptions)
+    setInterval(() => {
+      const display = new Date().toLocaleTimeString()
+      this.current_time = display
+    }, 1000)
   }
 }
 </script>
+
+<style lang="sass">
+.font-style
+  padding-top: 2px
+  font-size: 9px
+</style>
