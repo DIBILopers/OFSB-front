@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white q-pa-md">
-    <q-layout view="hHh Lpr fFf">
+  <div class="bg-white q-pa-none">
+    <q-layout view="hHh Lpr lFf">
       <q-header elevated style="background: #24292e;">
         <q-toolbar>
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
@@ -9,15 +9,14 @@
             Sabongan</q-toolbar-title>
         </q-toolbar>
       </q-header>
-
       <q-drawer
-        style="font-size: 15pt;"
+        content-style="font-size: 15pt; background: #24292e;"
         v-model="drawer"
         show-if-above
         :width="280"
         :breakpoint="500"
         bordered
-        content-class="bg-grey-10 text-white"
+        content-class="text-white"
       >
         <q-scroll-area class="fit">
           <q-list>
@@ -36,18 +35,14 @@
           </q-list>
         </q-scroll-area>
       </q-drawer>
-
       <q-page-container>
         <router-view />
       </q-page-container>
-
-      <q-footer class="row" style="background: rgba(250, 250, 250, 0.2)">
-        <div class="q-py-md text-center col-2" style="width: 250px">
+      <q-footer class="row flex flex-center" style="background: #fff">
+        <div class="q-py-md">
           <img height="20px" src="~assets/codeblood/small.png">
-            &nbsp;
-          <img height="20px" src="~assets/codeblood/small-text.png">
+          <img class="q-ml-sm" height="20px" src="~assets/codeblood/small-text.png">
         </div>
-        <div class="col"></div>
       </q-footer>
     </q-layout>
   </div>

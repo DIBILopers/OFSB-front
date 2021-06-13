@@ -42,7 +42,7 @@
                 <q-btn size="lg"  class="full-width" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"  push label="WALA"   @click="chooseSide('WALA')"/>
               </div>
             </div>
-            <div class="row q-gutter-sm">
+            <div class="row q-gutter-sm" >
               <q-card class="col">
                 <q-card-section class="row text-right q-gutter-md">
                   <div class="col text-black text-h4">
@@ -69,7 +69,7 @@
                 </q-card-section>
               </q-card>
               <q-card class="col text-black">
-                <q-card-section class="row q-gutter-md">
+                <q-card-section class="row q-gutter-md" >
                   <div class="col text-h6">
                     <q-list bordered separator>
                         <template>
@@ -109,10 +109,36 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-4 text-black" ref="content">
+          <div class="row q-pa-md"  :style="this.display == true ? 'font-size: 12px' : 'display: none;'">
+            <div class="col-12 text-center text-bold text-h6">{{ betside }}</div>
+            <div class="col-12 text-center text-body">{{ current_date }} {{ current_time }}</div>
+            <div class="col-6">Sultada # </div>
+            <div class="col-6 text-right">{{ current_data === null ? 'NO MATCHES' : current_data.match_number }} </div>
+            <div class="col-6">Bet Side: </div>
+            <div class="col-6 text-right"> {{ betside }} </div>
+            <div class="col-6"> Odds: </div>
+            <div class="col-6 text-right"> {{ odds }} </div>
+            <div class="col-6"> Bet Amount: </div>
+            <div class="col-6 text-right"> {{ numberFormat(betamount)  }} </div>
+            <div class="col-6"> Bet Prize: </div>
+            <div class="col-6 text-right"> {{ numberFormat(bet_prize)  }} </div>
+            <div class="col-6"> Total Payout: </div>
+            <div class="col-6 text-right"> {{ numberFormat(computedBet) }}  </div>
+            <div class="col-12">  <q-separator color="black"/></div>
+            <div class="col-6"> Cashier: </div>
+            <div class="col-6 text-right"> PC3 </div>
+            <div class="col-12"> 1. Ang ticket na ito ay para sa sultada # na naka sulat sa taas  </div>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
+import { jsPDF } from 'jspdf'
+// import html2pdf from 'html2pdf.js'
 import { axiosCont } from 'boot/axios'
 
 export default {
@@ -143,7 +169,8 @@ export default {
       current_data: [],
       current_time: '',
       dateOptions: { year: 'numeric', month: 'long', day: 'numeric' },
-      current_date: ''
+      current_date: '',
+      display: false
     }
   },
   watch: {
@@ -155,6 +182,33 @@ export default {
     }
   },
   methods: {
+    add_bet () {
+      this.display = true
+      const doc = new jsPDF()
+      doc.text(20, 20, 'Hello world!')
+      doc.text(20, 30, 'This is client-side Javascript, pumping out a PDF.')
+      doc.addPage()
+      doc.text(20, 20, 'Do you like that?')
+      doc.output('datauri')
+      // this.printLoading = true
+      // const data = Object.assign({}, this.$refs)
+      // html2pdf(data.content, {
+      //   margin: [10, 0, 0, 10],
+      //   image: {
+      //     type: 'jpeg',
+      //     quality: 2
+      //   },
+      //   html2canvas: {
+      //     scale: 3,
+      //     dpi: 144
+      //   },
+      //   jsPDF: {
+      //     orientation: 'portrait',
+      //     unit: 'pt',
+      //     format: [160, 300]
+      //   }
+      // })
+    },
     autoReload () {
       // setInterval(() => {
       this.getCurrentMatch()
@@ -174,27 +228,27 @@ export default {
         // window.location.reload()
       })
     },
-    add_bet (bet) {
-      this.loading = true
-      axiosCont.put('matches/add-bet/' + this.current_data.id, {
-        bet_side: bet,
-        bet_amount: this.betamount
-      }).then(response => {
-        console.log('added')
-        this.betside = ''
-        this.bet_color = ''
-        this.bet_b = ''
-        this.bet = 0
-        this.betamount = 0
-        this.betprize = 0
-        this.odds = 0
-        this.totalpayout = 0
-        // this.$q.loading.hide()
-        this.getCurrentMatch()
-        this.$q.loading.hide()
-        // window.location.reload()
-      })
-    },
+    // add_bet (bet) {
+    //   this.loading = true
+    //   axiosCont.put('matches/add-bet/' + this.current_data.id, {
+    //     bet_side: bet,
+    //     bet_amount: this.betamount
+    //   }).then(response => {
+    //     console.log('added')
+    //     this.betside = ''
+    //     this.bet_color = ''
+    //     this.bet_b = ''
+    //     this.bet = 0
+    //     this.betamount = 0
+    //     this.betprize = 0
+    //     this.odds = 0
+    //     this.totalpayout = 0
+    //     this.$q.loading.hide()
+    //     this.getCurrentMatch()
+    //     this.$q.loading.hide()
+    //     window.location.reload()
+    //   })
+    // },
     numberFormat (text) {
       return text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     },
