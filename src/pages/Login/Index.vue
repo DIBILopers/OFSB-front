@@ -7,7 +7,7 @@
               <div class="text-h3 text-center"> Login </div>
             </q-card-section>
             <q-card-section class="text-white" style="margin-top:20px;">
-              <q-input color="" dark v-model="form.email" type="email" class="text-white">
+              <q-input required color="" dark v-model="form.email" type="email" class="text-white" >
                 <template v-slot:prepend>
                   <q-icon name="mail" />
                 </template>
@@ -26,7 +26,7 @@
               </q-input>
             </q-card-section>
             <q-card-actions align="right">
-              <q-btn color="grey-3" class="full-width text-black" label="Login" />
+              <q-btn :ripple="{ color: 'blue' }" color="grey-3" push class="full-width text-black" label="login" @click="loginClick"/>
             </q-card-actions>
           </q-card>
         </div>
@@ -39,10 +39,15 @@ export default {
   data () {
     return {
       form: {
-        email: '',
-        password: ''
+        email: 'admin',
+        password: 'admin123'
       },
       isPwd: true
+    }
+  },
+  methods: {
+    loginClick () {
+      this.$router.push('/admin/home')
     }
   }
 }
