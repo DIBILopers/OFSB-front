@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white q-pa-md">
-  <q-layout view="hHh Lpr lff">
+  <div class="bg-white">
+    <q-layout view="hHh Lpr lFf">
       <q-header elevated style="background: #24292e;">
         <q-toolbar>
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
@@ -11,13 +11,13 @@
       </q-header>
 
       <q-drawer
-        style="font-size: 15pt"
+        style="font-size: 15pt;"
         v-model="drawer"
         show-if-above
         :width="280"
         :breakpoint="500"
         bordered
-        content-class="bg-blue-grey-1 text-grey-9"
+        content-class="bg-grey-10 text-white"
       >
         <q-scroll-area class="fit">
           <q-list>
@@ -40,6 +40,15 @@
       <q-page-container>
         <router-view />
       </q-page-container>
+
+      <q-footer class="row" style="background: rgba(250, 250, 250, 0.2)">
+        <div class="text-right q-pa-lg col-12">
+          <img height="20px" src="~assets/codeblood/small.png">
+            &nbsp;
+          <img height="20px" src="~assets/codeblood/small-text.png">
+        </div>
+        <div class="col"></div>
+      </q-footer>
     </q-layout>
   </div>
 </template>
@@ -62,7 +71,7 @@ const menuList = [
     icon: 'tv',
     label: 'Big Screen',
     separator: false,
-    route: '/admin/big-screen'
+    route: '/big-screen'
   },
   {
     icon: 'settings',

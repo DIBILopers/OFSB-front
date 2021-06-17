@@ -4,7 +4,7 @@
       <div id="match" class="row q-gutter-xs text-center">
         <q-card dark bordered class="col text-black bg-white my-card">
             <q-card-section>
-                <div class="text-h3">Match #</div>
+                <div class="text-h3">Match # {{ pastSize }}</div>
             </q-card-section>
 
             <q-separator dark inset />
@@ -39,14 +39,14 @@
               </q-card-section>
           </q-card>
       </div>
-      <div id="oddss" class="row q-gutter-xs text-center">
-        <q-dialog v-model="winnerPop" persistent>
-            <q-card>
-                <q-card-section class="q-pa-lg bg-red text-white row text-center q-gutter-md">
-                  <div class="text-h1">MERON</div>
-                  <div class="text-h1">WINS</div>
-                </q-card-section>
-            </q-card>
+      <div id="winnerPop" class="row justify-center q-gutter-xs">
+        <q-dialog  v-model="winnerPop">
+          <q-card style="width:500px;" :class="modal.bground">
+              <q-card-section class="text-white text-center">
+                <div class="text-h1">{{ winner }}</div>
+                <div class="text-h1">{{ winnerConcat }}</div>
+              </q-card-section>
+          </q-card>
         </q-dialog>
       </div>
     </div>
@@ -55,14 +55,14 @@
         <!-- <div class="col"></div> -->
         <div class="col q-gutter-sm">
           <div bordered separator v-for="match in recent_data" :key="match.match_number">
-            <q-card v-if="match.winner == 'MERON'" class="bg-red text-white my-card q-pa-md text-center" >
-              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }}</q-card-section>
+            <q-card v-if="match.winner == 'MERON'" class="bg-red text-white my-card q-pa-md text-left" >
+              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }} WINS</q-card-section>
             </q-card>
-            <q-card v-else-if="match.winner == 'WALA'" class="bg-blue text-white my-card q-pa-md text-center" >
-              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }}</q-card-section>
+            <q-card v-else-if="match.winner == 'WALA'" class="bg-blue text-white my-card q-pa-md text-left" >
+              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }} WINS</q-card-section>
             </q-card>
-            <q-card v-else-if="match.winner == 'DRAW'" class="bg-green text-white my-card q-pa-md text-center" >
-              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }}</q-card-section>
+            <q-card v-else-if="match.winner == 'DRAW'" class="bg-green text-white my-card q-pa-md text-left" >
+              <q-card-section class="text-h3">#{{ match.match_number }} {{ match.winner }} MATCH</q-card-section>
             </q-card>
           </div>
         </div>
@@ -78,6 +78,8 @@ export default {
   data () {
     return {
       winnerPop: false,
+      winner: '',
+      winnerConcat: '',
       isPwd: true,
       matchTable: {
         loading: false,
@@ -94,30 +96,16 @@ export default {
       save: false,
       current_data: [],
       recent_data: [],
-
+      pastSize: 0,
       matchData: []
     }
   },
   methods: {
-    getMatchData () {
-      this.matchTable.loading = true
-      axiosCont.get('matches/getdata', {
-
-      }).then(response => {
-        console.log('this respo')
-        console.log(response.data)
-        this.matchData = response.data
-        this.matchTable.loading = false
-      })
-    },
-
     getCurrentMatch () {
       this.matchTable.loading = true
       axiosCont.get('matches/current', {
 
       }).then(response => {
-        console.log('this respo')
-        console.log(response.data)
         this.current_data = response.data
         this.matchTable.loading = false
       })
@@ -127,23 +115,38 @@ export default {
       axiosCont.get('matches/recent', {
 
       }).then(response => {
-        console.log('recent')
-        console.log(response.data)
         this.recent_data = response.data
+        // console.log('lul')
+        // console.log(this.recent_data)
+        // console.log(this.recent_data[0].is_displayed)
+        if (this.recent_data[0].is_displayed) {
+          this.displayWinner(this.recent_data[0].winner)
+          setTimeout(() => {
+            axiosCont.put('matches/is-displayed/' + this.recent_data[0].id, {
+            }).then(response => {
+              this.winnerPop = false
+            })
+          }, 5000)
+        }
         this.matchTable.loading = false
       })
     },
     displayWinner (text) {
-      console.log(text)
-      if (text === 'meron') {
+      if (text === 'MERON') {
         this.winner = 'MERON'
+        this.winnerConcat = 'WINS'
         this.modal.bground = 'bg-red'
-      } else {
+      } else if (text === 'WALA') {
         this.winner = 'WALA'
+        this.winnerConcat = 'WINS'
         this.modal.bground = 'bg-blue'
+      } else {
+        this.winner = 'DRAW'
+        this.winnerConcat = 'MATCH'
+        this.modal.bground = 'bg-green'
       }
       this.winnerPop = true
-      this.started = false
+      // this.started = false
     },
     startmatch () {
       this.started = true
@@ -153,9 +156,14 @@ export default {
     }
   },
   mounted () {
-    this.getMatchData()
     this.getCurrentMatch()
     this.getRecentMatch()
+    setInterval(() => {
+      this.getCurrentMatch()
+      if (this.current_data !== null) {
+        this.getRecentMatch()
+      }
+    }, 1000)
     // this.matchTable.loading = false
   }
 }

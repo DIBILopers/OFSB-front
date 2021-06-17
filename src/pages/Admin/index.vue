@@ -73,6 +73,7 @@
                   <q-td key="wala_odd" :props="props">{{ props.row.wala_odd }}</q-td>
                   <q-td key="meron_total" :props="props">{{ props.row.meron_total }}</q-td>
                   <q-td key="wala_total" :props="props">{{ props.row.wala_total }}</q-td>
+                  <q-td key="total_bet" :props="props">{{ numberFormat(props.row.total_bet) }}</q-td>
                   <q-td key="winner" :props="props">{{ props.row.winner }}</q-td>
                   <q-td key="action" :props="props" class="q-gutter-xs">
                       <q-btn color="green-6" class="btn-action"  @click="oddEdit = true" :disable="matchTable.tableLoading" icon="edit" size="sm" dense flat>
@@ -147,6 +148,15 @@ export default {
             sortable: true
           },
           {
+            name: 'total_bet',
+            required: true,
+            label: 'Total Bet',
+            align: 'center',
+            field: 'total_bet',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
             name: 'winner',
             required: true,
             label: 'Winner',
@@ -193,6 +203,9 @@ export default {
         this.matchTable.loading = false
       })
     },
+    numberFormat (text) {
+      return text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
     displayWinner (text) {
       console.log(text)
       if (text === 'meron') {
@@ -214,6 +227,7 @@ export default {
   },
   mounted () {
     this.getMatchData()
+    console.log('state: ' + this.$store.state.reload.changed)
     // this.matchTable.loading = false
   }
 }
