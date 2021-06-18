@@ -293,6 +293,8 @@ export default {
     },
     startmatch () {
       this.started = true
+      axiosCont.put('matches/start-match/' + this.current_data.id, {
+      })
     }
   },
   mounted () {

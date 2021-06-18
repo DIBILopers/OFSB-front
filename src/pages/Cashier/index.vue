@@ -4,7 +4,7 @@
           <div class="col-4 text-center">
             <q-card dark bordered class="col text-black bg-white my-card">
               <q-card-section>
-                  <div class="text-h4">Match #</div>
+                  <div class="text-h4">Match # {{ disable_betting }}</div>
               </q-card-section>
               <q-separator inset />
               <q-card-section class="q-pa-md text-h3">
@@ -36,10 +36,10 @@
         <div class="col-8">
           <div class="row q-mb-md q-col-gutter-md">
             <div class="col-6">
-              <q-btn size="lg" class="full-width" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)" push label="MERON"  @click="chooseSide('MERON')"/>
+              <q-btn size="lg" class="full-width" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)" push label="MERON"  @click="chooseSide('MERON')" :disable="disable_betting"/>
             </div>
             <div class="col-6">
-              <q-btn size="lg"  class="full-width" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"  push label="WALA"   @click="chooseSide('WALA')"/>
+              <q-btn size="lg"  class="full-width" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"  push label="WALA"   @click="chooseSide('WALA')" :disable="disable_betting"/>
             </div>
           </div>
           <div class="row q-gutter-sm">
@@ -51,21 +51,21 @@
               </q-card-section>
               <q-separator dark color="grey-7" inset />
               <q-card-section class="row q-gutter-md">
-                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="100" @click="amount('100')" />
-                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="500" @click="amount('500')" />
-                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="1,000" @click="amount('1000')" />
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="100" @click="amount('100')" />
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="500" @click="amount('500')" />
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="1,000" @click="amount('1000')" />
               </q-card-section>
               <q-card-section class="row q-gutter-md">
-                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="2,000" @click="amount('2000')" />
-                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="3,000" @click="amount('3000')" />
-                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="4,000" @click="amount('4000')" />
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="2,000" @click="amount('2000')" />
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="3,000" @click="amount('3000')" />
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="4,000" @click="amount('4000')" />
               </q-card-section>
               <q-card-section class="row q-gutter-md">
-                <q-btn :disable="disabe_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
               </q-card-section>
               <q-card-section class="row q-mt-lg q-gutter-md">
-                <q-btn color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @click="add_bet(betside)" />
-                <q-btn :disable="disabe_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
+                <q-btn :disable="disable_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @keyup.enter="add_bet(betside)" @click="add_bet(betside)" />
+                <q-btn :disable="disable_betting" color="orange-10" glossy text-color="white" push label="Clear" icon="backspace" class="col" @click="amount('Clear')" />
               </q-card-section>
             </q-card>
             <q-card class="col text-black">
@@ -107,6 +107,11 @@
               </q-card-section>
             </q-card>
           </div>
+        </div>
+      </div>
+      <div :class="!disable_betting ? 'hidden': 'row q-mt-md'">
+        <div class="col-12 q-pa-md text-center" style="background: radial-gradient(circle, rgb(255, 163, 163) 0%, rgb(184, 0, 6) 100%)">
+          <h2>MATCH STARTED</h2>
         </div>
       </div>
       <div>
@@ -216,7 +221,7 @@ export default {
       sultada: '',
       nickname: 'bords',
       betamount: 0,
-      disabe_betting: true,
+      disable_betting: null,
       betprize: 0,
       odds: 0,
       totalpayout: 0,
@@ -254,24 +259,20 @@ export default {
       // this.loading = true
       axiosCont.get('matches/current', {
       }).then(response => {
-        // console.log('this respo')
-        // console.log(response.data)
         this.current_data = response.data
         this.meron = this.current_data === null ? 0 : this.current_data.meron_odd
         this.wala = this.current_data === null ? 0 : this.current_data.wala_odd
+        this.disable_betting = this.current_data === null ? true : this.current_data.disable_betting
         this.ended = this.current_data === null
-        // this.loading = false
-        // window.location.reload()
       })
     },
     add_bet (bet) {
-      this.loading = true
+      // this.loading = true
+      this.generateReport()
       axiosCont.put('matches/add-bet/' + this.current_data.id, {
         bet_side: bet,
         bet_amount: this.betamount
       }).then(response => {
-        this.generateReport()
-        console.log('added')
         this.betside = ''
         this.bet_color = ''
         this.bet_b = ''
@@ -325,7 +326,7 @@ export default {
     this.getCurrentMatch()
     setInterval(() => {
       this.getCurrentMatch()
-    }, 10000)
+    }, 5000)
     const date = new Date()
     this.current_date = date.toLocaleDateString('en-US', this.dateOptions)
     setInterval(() => {
