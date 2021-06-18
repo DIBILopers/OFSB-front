@@ -42,11 +42,16 @@ export default {
         email: 'admin',
         password: 'admin123'
       },
-      isPwd: true
+      isPwd: false
     }
   },
   methods: {
     loginClick () {
+      // const data = {
+      //   email: this.email,
+      //   password: this.password
+      // }
+      // console.log(data)
       this.$router.push('/admin/home')
     }
   }
