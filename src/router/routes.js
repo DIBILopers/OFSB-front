@@ -22,7 +22,8 @@ const routes = [
     path: '/cashier',
     component: () => import('layouts/AdminLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Cashier/Index.vue') }
+      { path: '', component: () => import('pages/Cashier/Index.vue') },
+      { path: 'claim', component: () => import('pages/Cashier/Claim.vue') }
     ]
   },
 

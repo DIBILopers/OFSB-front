@@ -4,7 +4,7 @@
           <div class="col-4 text-center">
             <q-card dark bordered class="col text-black bg-white my-card">
               <q-card-section>
-                  <div class="text-h4">Match # {{ disable_betting }}</div>
+                  <div class="text-h4">Match # </div>
               </q-card-section>
               <q-separator inset />
               <q-card-section class="q-pa-md text-h3">
@@ -59,6 +59,9 @@
                 <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="2,000" @click="amount('2000')" />
                 <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="3,000" @click="amount('3000')" />
                 <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="4,000" @click="amount('4000')" />
+              </q-card-section>
+              <q-card-section class="row q-gutter-md">
+                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
               </q-card-section>
               <q-card-section class="row q-gutter-md">
                 <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
@@ -128,7 +131,6 @@
           pdf-format="a7"
           pdf-orientation="portrait"
           pdf-content-width="212px"
-          @progress="onProgress($event)"
           @hasStartedGeneration="hasStartedGeneration()"
           @hasGenerated="hasGenerated($event)"
           ref="html2Pdf"
@@ -268,6 +270,17 @@ export default {
     },
     add_bet (bet) {
       // this.loading = true
+      axiosCont.post('matches/record-bet', {
+        ticket_number: this.ticket_number(),
+        match_number: this.current_data.match_number,
+        bet_side: bet,
+        match_odd: this.current_data.meron_odd + ' : ' + this.current_data.wala_odd,
+        bet_amount: this.betamount,
+        bet_prize: this.bet_prize,
+        total_payout: this.computedBet
+      }).then(response => {
+        //
+      })
       this.generateReport()
       axiosCont.put('matches/add-bet/' + this.current_data.id, {
         bet_side: bet,
@@ -286,6 +299,10 @@ export default {
         this.$q.loading.hide()
         // window.location.reload()
       })
+    },
+    ticket_number () {
+      const today = new Date()
+      return String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0') + today.getFullYear() + today.getHours() + today.getMinutes() + today.getSeconds()
     },
     numberFormat (text) {
       return text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
