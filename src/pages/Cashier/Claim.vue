@@ -15,7 +15,7 @@
           >
           <template v-slot:top>
               <q-space />
-              <q-input borderless dense debounce="300" filled color="grey-7" placeholder="Search" v-model="filter">
+              <q-input borderless dense debounce="300" filled color="grey-7" placeholder="Search" v-model="table.filter">
                   <template v-slot:append>
                       <q-icon name="search" />
                   </template>
@@ -33,7 +33,7 @@
                   <q-td key="total_payout" :props="props">{{ numberFormat(props.row.total_payout) }}</q-td>
                   <q-td key="status" :props="props">{{ props.row.status }}</q-td>
                   <q-td key="action" :props="props" class="q-gutter-xs">
-                      <q-btn color="green-6" class="btn-action" label="Claim" size="sm" dense >
+                      <q-btn color="green-6" class="btn-action" :disable="props.row.status === 'Lose'" label="Claim" size="sm" dense >
                           <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Claim</q-tooltip>
                       </q-btn>
                       <!-- <q-btn color="red-6" class="btn-action" @click="onDelete(props.row)" :disable="tableLoading" icon="delete" size="sm" dense flat>
@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     getData () {
-      axiosCont.get('matches/index', {
+      axiosCont.get('bets/index', {
       }).then(response => {
         this.table.data = response.data
       })

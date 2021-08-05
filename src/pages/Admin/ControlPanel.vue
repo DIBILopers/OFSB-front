@@ -3,7 +3,7 @@
     <div id="match" class="row q-gutter-xs text-center">
         <q-card dark bordered class="col text-black bg-white my-card">
             <q-card-section>
-                <div class="text-h3">Match # {{ this.$store.state.reload.changed }}</div>
+                <div class="text-h3">Match #</div>
             </q-card-section>
 
             <q-separator dark inset />

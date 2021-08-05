@@ -64,7 +64,13 @@
                 <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
               </q-card-section>
               <q-card-section class="row q-gutter-md">
-                <q-btn :disable="disable_betting" class="col text-h6" outline color="black" label="5,000" @click="amount('5000')"/>
+                <q-input class="col" square outlined label="Other Amount" v-model="betamount">
+                  <template v-slot:append>
+                    <q-avatar>
+                      <img src="~assets/roaster-logo.png">
+                    </q-avatar>
+                  </template>
+                </q-input>
               </q-card-section>
               <q-card-section class="row q-mt-lg q-gutter-md">
                 <q-btn :disable="disable_betting" color="green" glossy text-color="white" push label="Print" icon="print"  class="col" @keyup.enter="add_bet(betside)" @click="add_bet(betside)" />
@@ -270,21 +276,23 @@ export default {
     },
     add_bet (bet) {
       // this.loading = true
-      axiosCont.post('matches/record-bet', {
+      axiosCont.post('bets/add', {
         ticket_number: this.ticket_number(),
         match_number: this.current_data.match_number,
         bet_side: bet,
         match_odd: this.current_data.meron_odd + ' : ' + this.current_data.wala_odd,
         bet_amount: this.betamount,
         bet_prize: this.bet_prize,
-        total_payout: this.computedBet
+        total_payout: this.computedBet,
+        cashier_id: 1
       }).then(response => {
-        //
+        console.log(response)
       })
       this.generateReport()
       axiosCont.put('matches/add-bet/' + this.current_data.id, {
         bet_side: bet,
-        bet_amount: this.betamount
+        bet_amount: this.betamount,
+        total_payout: this.computedBet
       }).then(response => {
         this.betside = ''
         this.bet_color = ''

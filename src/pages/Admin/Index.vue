@@ -47,7 +47,6 @@
       </q-card>
     </q-dialog>
 
-    <div class="text-h5">Matches</div>
     <div id="history">
       <q-table
           title="Matches"
@@ -55,10 +54,11 @@
           :columns="matchTable.columns"
           :filter="matchTable.filter"
           :loading="matchTable.loading"
+          :pagination="matchTable.initialPagination"
           row-key="name"
       >
           <template v-slot:top>
-              <q-btn unelevated outline class="bg-green glossy text-white" @click="oddEdit = true" label="Add Match" icon="add" />
+            <div class="text-h5">Matches</div>
               <q-space />
               <q-input borderless dense debounce="300" filled color="grey-7" placeholder="Search" v-model="matchTable.filter">
                   <template v-slot:append>
@@ -71,17 +71,23 @@
                   <q-td key="match_number" :props="props">{{ props.row.match_number }}</q-td>
                   <q-td key="meron_odd" :props="props">{{ props.row.meron_odd }}</q-td>
                   <q-td key="wala_odd" :props="props">{{ props.row.wala_odd }}</q-td>
-                  <q-td key="meron_total" :props="props">{{ props.row.meron_total }}</q-td>
-                  <q-td key="wala_total" :props="props">{{ props.row.wala_total }}</q-td>
-                  <q-td key="total_bet" :props="props">{{ numberFormat(props.row.total_bet) }}</q-td>
                   <q-td key="winner" :props="props">{{ props.row.winner }}</q-td>
-                  <q-td key="action" :props="props" class="q-gutter-xs">
-                      <q-btn color="green-6" class="btn-action"  @click="oddEdit = true" :disable="matchTable.tableLoading" icon="edit" size="sm" dense flat>
-                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Update</q-tooltip>
-                      </q-btn>
-                      <q-btn color="red-6" class="btn-action" :disable="matchTable. tableLoading" icon="delete" size="sm" dense flat>
-                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Delete</q-tooltip>
-                      </q-btn>
+                  <q-td key="meron_bet_total" :props="props">{{ numberFormat(props.row.meron_bet_total) }}</q-td>
+                  <q-td key="wala_bet_total" :props="props">{{ numberFormat(props.row.wala_bet_total) }}</q-td>
+                  <q-td key="meron_win_total" :props="props">{{ numberFormat(props.row.meron_win_total) }}</q-td>
+                  <q-td key="wala_win_total" :props="props">{{ numberFormat(props.row.wala_win_total) }}</q-td>
+                  <q-td key="total_bet" :props="props">{{ numberFormat(props.row.total_bet) }}</q-td>
+                  <q-td v-if="props.row.winner === 'MERON'" :class="props.row.total_bet - props.row.meron_win_total < 0 ? 'text-red': 'text-black'" key="total_sales" :props="props">
+                    {{ numberFormat(props.row.total_bet - props.row.meron_win_total) }}
+                  </q-td>
+                  <q-td v-else-if="props.row.winner === 'WALA'" :class="props.row.total_bet - props.row.wala_win_total < 0 ? 'text-red': 'text-black'" key="total_sales" :props="props">
+                    {{ numberFormat(props.row.total_bet - props.row.wala_win_total) }}
+                  </q-td>
+                  <q-td v-else-if="props.row.winner === 'DRAW'" key="total_sales" :props="props">
+                    {{ numberFormat(props.row.total_bet - props.row.total_bet) }}
+                  </q-td>
+                  <q-td v-else key="total_sales" :props="props">
+                    {{ numberFormat(props.row.total_bet) }}
                   </q-td>
               </q-tr>
           </template>
@@ -97,6 +103,12 @@ export default {
     return {
       isPwd: true,
       matchTable: {
+        initialPagination: {
+          descending: false,
+          page: 1,
+          rowsPerPage: 30
+          // rowsNumber: xx if getting data from a server
+        },
         loading: false,
         filter: null,
         tableLoading: false,
@@ -129,21 +141,66 @@ export default {
             format: val => `${val}`,
             sortable: true
           },
+          // {
+          //   name: 'meron_total',
+          //   required: true,
+          //   label: 'Meron Bets',
+          //   align: 'center',
+          //   field: 'meron_total',
+          //   format: val => `${val}`,
+          //   sortable: true
+          // },
+          // {
+          //   name: 'wala_total',
+          //   required: true,
+          //   label: 'Wala Bets',
+          //   align: 'center',
+          //   field: 'wala_total',
+          //   format: val => `${val}`,
+          //   sortable: true
+          // },
           {
-            name: 'meron_total',
+            name: 'winner',
             required: true,
-            label: 'Meron Bets',
+            label: 'Winner',
             align: 'center',
-            field: 'meron_total',
+            field: 'winner',
             format: val => `${val}`,
             sortable: true
           },
           {
-            name: 'wala_total',
+            name: 'meron_bet_total',
             required: true,
-            label: 'Wala Bets',
+            label: 'Meron Total Bet',
             align: 'center',
-            field: 'wala_total',
+            field: 'meron_bet_total',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'wala_bet_total',
+            required: true,
+            label: 'Wala Total Bet',
+            align: 'center',
+            field: 'wala_bet_total',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'meron_win_total',
+            required: true,
+            label: 'Meron Total Prize',
+            align: 'center',
+            field: 'meron_win_total',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'wala_win_total',
+            required: true,
+            label: 'Wala Total Prize',
+            align: 'center',
+            field: 'wala_win_total',
             format: val => `${val}`,
             sortable: true
           },
@@ -157,11 +214,11 @@ export default {
             sortable: true
           },
           {
-            name: 'winner',
+            name: 'total_sales',
             required: true,
-            label: 'Winner',
+            label: 'Total Sales',
             align: 'center',
-            field: 'winner',
+            field: 'total_sales',
             format: val => `${val}`,
             sortable: true
           }
