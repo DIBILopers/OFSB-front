@@ -30,12 +30,28 @@
                   <q-td key="match_odd" :props="props">{{ props.row.match_odd }}</q-td>
                   <q-td key="bet_amount" :props="props">{{ numberFormat(props.row.bet_amount) }}</q-td>
                   <q-td key="bet_prize" :props="props">{{ numberFormat(props.row.bet_prize) }}</q-td>
-                  <q-td key="total_payout" :props="props">{{ numberFormat(props.row.total_payout) }}</q-td>
+                  <q-td key="total_payout" :props="props">{{ props.row.match_winner === 'DRAW'? numberFormat(props.row.bet_amount) : numberFormat(props.row.total_payout) }}</q-td>
                   <q-td key="status" :props="props">{{ props.row.status }}</q-td>
                   <q-td key="action" :props="props" class="q-gutter-xs">
-                      <q-btn color="green-6" class="btn-action" :disable="props.row.status === 'Lose'" label="Claim" size="sm" dense >
-                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Claim</q-tooltip>
+                      <q-btn :color="props.row.status === 'Unclaimed' || props.row.status === 'Draw'? 'green-6' : (props.row.status === 'Claimed' ? 'amber-9' : 'red-6')" @click="claim(props.row)" class="btn-action" :disable="props.row.status === 'Lose' || props.row.status === 'Claimed'" :label="props.row.status === 'Claimed' ? 'Claimed' : 'Claim'" size="sm" dense >
+                          <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">{{ props.row.status === 'Claimed' ? "Claimed" : "Claim" }}</q-tooltip>
                       </q-btn>
+                      <q-dialog v-model="modal.claim" persistent>
+                      <q-card dark class="q-pa-sm" style="min-width: 350px; width: 400px; background: rgba(0,0,0, 0.90)" >
+                        <q-card-section>
+                          <div class="text-h6"><q-icon name="warning" class="text-red q-mb-md" style="font-size: 3rem;" />Confirm Action</div>
+                        </q-card-section>
+
+                        <q-card-section>
+                          <div class="text-h6 text-center">Claim PHP {{ numberFormat(modal.modalData.bet_amount) }}</div>
+                        </q-card-section>
+
+                        <q-card-actions align="right" class="text-primary">
+                          <q-btn @click="confirmClaim(modal.modalData)" color="green" flat label="Confirm" v-close-popup />
+                          <q-btn color="red" flat label="Close" v-close-popup />
+                        </q-card-actions>
+                      </q-card>
+                    </q-dialog>
                       <!-- <q-btn color="red-6" class="btn-action" @click="onDelete(props.row)" :disable="tableLoading" icon="delete" size="sm" dense flat>
                           <q-tooltip content-class="grey" :delay="550" anchor="top middle" self="center middle">Delete</q-tooltip>
                       </q-btn> -->
@@ -56,7 +72,13 @@ export default {
   data () {
     return {
       modal: {
-        bground: ''
+        bground: '',
+        claim: false,
+        confirm: false,
+        modalData: {
+          id: null,
+          bet_amount: 0
+        }
       },
       table: {
         columns: [
@@ -82,6 +104,18 @@ export default {
       axiosCont.get('bets/index', {
       }).then(response => {
         this.table.data = response.data
+      })
+    },
+    claim (data) {
+      // axiosCont.pu
+      this.modal.claim = true
+      this.modal.modalData = data
+    },
+    confirmClaim (data) {
+      axiosCont.put('bets/claim/' + data.id, {
+      }).then(response => {
+        console.log(response.data)
+        this.getData()
       })
     },
     numberFormat (text) {

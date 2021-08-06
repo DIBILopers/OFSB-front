@@ -71,12 +71,12 @@
                   <q-td key="match_number" :props="props">{{ props.row.match_number }}</q-td>
                   <q-td key="meron_odd" :props="props">{{ props.row.meron_odd }}</q-td>
                   <q-td key="wala_odd" :props="props">{{ props.row.wala_odd }}</q-td>
-                  <q-td key="winner" :props="props">{{ props.row.winner }}</q-td>
                   <q-td key="meron_bet_total" :props="props">{{ numberFormat(props.row.meron_bet_total) }}</q-td>
                   <q-td key="wala_bet_total" :props="props">{{ numberFormat(props.row.wala_bet_total) }}</q-td>
                   <q-td key="meron_win_total" :props="props">{{ numberFormat(props.row.meron_win_total) }}</q-td>
                   <q-td key="wala_win_total" :props="props">{{ numberFormat(props.row.wala_win_total) }}</q-td>
                   <q-td key="total_bet" :props="props">{{ numberFormat(props.row.total_bet) }}</q-td>
+                  <q-td key="winner" :props="props">{{ props.row.winner }}</q-td>
                   <q-td v-if="props.row.winner === 'MERON'" :class="props.row.total_bet - props.row.meron_win_total < 0 ? 'text-red': 'text-black'" key="total_sales" :props="props">
                     {{ numberFormat(props.row.total_bet - props.row.meron_win_total) }}
                   </q-td>
@@ -160,15 +160,6 @@ export default {
           //   sortable: true
           // },
           {
-            name: 'winner',
-            required: true,
-            label: 'Winner',
-            align: 'center',
-            field: 'winner',
-            format: val => `${val}`,
-            sortable: true
-          },
-          {
             name: 'meron_bet_total',
             required: true,
             label: 'Meron Total Bet',
@@ -210,6 +201,15 @@ export default {
             label: 'Total Bet',
             align: 'center',
             field: 'total_bet',
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'winner',
+            required: true,
+            label: 'Winner',
+            align: 'center',
+            field: 'winner',
             format: val => `${val}`,
             sortable: true
           },
